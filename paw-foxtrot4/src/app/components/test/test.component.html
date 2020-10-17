@@ -1,0 +1,18 @@
+<input type="text" [(ngModel)]="this.key"> 
+<input type="text" [(ngModel)]="this.value">
+
+<button type="button" (click)="onSendButtonClick()" >send</button>
+
+
+<div *ngIf="list">
+
+
+    <div *ngFor="let obj of list">
+       {{ obj.key }} - {{ obj.value }}
+
+    </div>
+</div>
+
+
+
+
