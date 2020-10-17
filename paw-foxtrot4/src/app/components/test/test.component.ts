@@ -39,4 +39,12 @@ export class TestComponent implements OnInit {
 
   }
 
+  deleteObj(obj){
+
+    this.testService.delete(obj).subscribe(r =>{
+      this.update();
+    });
+
+  }
+
 }

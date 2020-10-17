@@ -8,7 +8,7 @@
 
 
     <div *ngFor="let obj of list">
-       {{ obj.key }} - {{ obj.value }}
+       {{ obj.key }} - {{ obj.value }} <button type="button" (click)="deleteObj(obj)">x</button>
 
     </div>
 </div>

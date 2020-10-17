@@ -35,12 +35,20 @@ export class TestService {
   }
 
   put(objects:any[]){
-    /*let headers: HttpHeaders = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    headers = headers.append('Accept', 'application/json');
-*/
     console.log(objects);
     let url = this.apiUrl + '/skeleton/put';
+
+    return this.http.post<[]>(url, objects)
+    .pipe(
+      tap(_ => this.log('brr service working')),
+      catchError(this.handleError<[]>('post ' + url, []))
+    );
+  }
+
+  
+  delete(objects:any[]){
+    console.log(objects);
+    let url = this.apiUrl + '/skeleton/delete';
 
     return this.http.post<[]>(url, objects)
     .pipe(
