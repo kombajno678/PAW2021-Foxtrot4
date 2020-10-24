@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, map, tap} from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -9,21 +10,13 @@ import { Observable, of } from 'rxjs';
 })
 export class TestService {
 
-  private apiUrl = 'http://localhost:5000';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {
 
   }
 
-
-
-
   get():Observable<[]>{
-    /*
-    let headers: HttpHeaders = new HttpHeaders();
-    headers = headers.append('Content-Type', 'application/json');
-    headers = headers.append('Accept', 'application/json');
-*/
     let url = this.apiUrl + '/skeleton/get';
 
     return this.http.get<[]>(url)
@@ -35,7 +28,6 @@ export class TestService {
   }
 
   put(objects:any[]){
-    console.log(objects);
     let url = this.apiUrl + '/skeleton/put';
 
     return this.http.post<[]>(url, objects)
@@ -47,7 +39,6 @@ export class TestService {
 
   
   delete(objects:any[]){
-    console.log(objects);
     let url = this.apiUrl + '/skeleton/delete';
 
     return this.http.post<[]>(url, objects)
@@ -56,10 +47,6 @@ export class TestService {
       catchError(this.handleError<[]>('post ' + url, []))
     );
   }
-
-
-
-
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
