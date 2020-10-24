@@ -27,7 +27,7 @@ export class TestService {
 
   }
 
-  put(objects:any[]){
+  put(objects:any){
     let url = this.apiUrl + '/skeleton/put';
 
     return this.http.post<[]>(url, objects)
@@ -38,7 +38,7 @@ export class TestService {
   }
 
   
-  delete(objects:any[]){
+  delete(objects:any){
     let url = this.apiUrl + '/skeleton/delete';
 
     return this.http.post<[]>(url, objects)

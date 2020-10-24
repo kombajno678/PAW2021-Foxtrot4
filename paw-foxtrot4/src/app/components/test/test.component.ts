@@ -12,31 +12,32 @@ export class TestComponent implements OnInit {
 
   list = [];
 
-  form:FormGroup;
+  form: FormGroup;
 
-  displayedColumns: string[] = ['key', 'value', 'operation'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'createdAt', 'updatedAt', 'operation'];
   dataSource;
 
   constructor(
-    private testService:TestService,
-    private fb:FormBuilder) {
-  
+    private testService: TestService,
+    private fb: FormBuilder) {
 
-    }
+
+  }
 
   ngOnInit(): void {
-    
+
     this.form = this.fb.group({
-      key: new FormControl(null, [Validators.required], []),
-      value:  new FormControl(null, [Validators.required], [])
+      firstName: new FormControl(null, [Validators.required], []),
+      lastName: new FormControl(null, [Validators.required], []),
+      email: new FormControl(null, [Validators.required], [])
     })
 
 
     this.update();
   }
 
-  update(){
-    this.testService.get().subscribe(r =>{
+  update() {
+    this.testService.get().subscribe(r => {
       console.log('received data: ', r);
       this.list = r;
       this.dataSource = r;
@@ -44,18 +45,17 @@ export class TestComponent implements OnInit {
     })
   }
 
-  onSendButtonClick(){
-    console.log(this.form.get('key').value, this.form.get('value').value);
-    this.testService.put([{key: this.form.get('key').value, value: this.form.get('value').value}]).subscribe(r =>{
+  onSendButtonClick() {
+    // console.log(this.form.get('key').value, this.form.get('value').value);
+    this.testService.put({ firstName: this.form.get('firstName').value, lastName: this.form.get('lastName').value, email: this.form.get('email').value }).subscribe(r => {
       console.log('sent', r);
       this.update();
     });
-
   }
 
-  deleteObj(obj){
+  deleteObj(obj) {
 
-    this.testService.delete(obj).subscribe(r =>{
+    this.testService.delete(obj).subscribe(r => {
       this.update();
     });
 
