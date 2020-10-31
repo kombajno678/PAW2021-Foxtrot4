@@ -5,13 +5,14 @@
             <mat-icon>menu</mat-icon>
         </button>
         
-        <a routerLink=""><h1 class="example-app-name"> Trecllone </h1></a>
+        <h1 class="example-app-name"> Trecllone </h1>
 
     </mat-toolbar>
 
     <mat-sidenav-container class="example-sidenav-container">
         <mat-sidenav #snav [mode]="'over'" fixedTopGap="56">
             <mat-nav-list>
+                <a (click)="snav.toggle()" mat-list-item routerLink="">Home</a>
                 <ng-container *ngIf="user">
                     <a (click)="snav.toggle()" mat-list-item routerLink="logout">Log out</a>
                     <a (click)="snav.toggle()" mat-list-item routerLink="allboards">Boards</a>
