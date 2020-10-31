@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -32,7 +33,8 @@ export class LoginFormComponent implements OnInit {
   
 
   constructor(
-    private authService:AuthService
+    private authService:AuthService,
+    private router: Router
   ) {
     this.form = new FormGroup(
       {
@@ -67,15 +69,17 @@ export class LoginFormComponent implements OnInit {
 
         if(r === true){
           this.openSnackBarSubject.next("Login successful");
-          
+
+          setTimeout( () => this.router.navigate(['/']), 1000);
 
         }else{
           this.openSnackBarSubject.next("Error, login failed");
           this.form.controls.email.enable();
           this.form.controls.password.enable();
+          this.loading = false;
+
         }
 
-        this.loading = false;
       });
 
     }else{

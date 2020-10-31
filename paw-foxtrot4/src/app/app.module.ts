@@ -18,6 +18,8 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { LoginFormComponent } from './components/login-page/login-form/login-form.component';
 import { SigninFormComponent } from './components/login-page/signin-form/signin-form.component';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { MainPageComponent } from './components/main-page/main-page.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 
 
@@ -29,6 +31,8 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
     LoginPageComponent,
     LoginFormComponent,
     SigninFormComponent,
+    MainPageComponent,
+    LogoutComponent,
   ],
   imports: [
     MaterialModule,

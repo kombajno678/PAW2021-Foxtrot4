@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormGroupDirective, NgForm, AbstractControl } from '@angular/forms';
 import {ErrorStateMatcher} from '@angular/material/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -29,9 +30,9 @@ export class SigninFormComponent implements OnInit {
   @Output()
   openSnackBarSubject: Subject<string> = new Subject<string>();
 
-
   constructor(
-    private authService:AuthService
+    private authService:AuthService,
+    private router: Router
   ) {
     this.form = new FormGroup(
       {
@@ -89,12 +90,14 @@ export class SigninFormComponent implements OnInit {
 
         if(r === true){
           this.openSnackBarSubject.next("Sign in successful");
+          setTimeout(() => this.router.navigate(['/']), 1000);
+
         }else{
           this.openSnackBarSubject.next("Error, signin failed");
           this.enableForm(true);
+          this.loading = false;
         }
 
-        this.loading = false;
       })
     }else{
       this.openSnackBarSubject.next("Error, invalid data in form");

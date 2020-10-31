@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { ConditionalExpr } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,32 @@ export class AuthService {
 
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
-
   dummy = new Subject<any>();
 
+  userStorageKey:string = 'user';
+
+  private userSubject: BehaviorSubject<any>;
+  public user: Observable<any>;
+
+
+
+  constructor(private http: HttpClient) {
+    this.userSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem(this.userStorageKey)));
+    this.user = this.userSubject.asObservable();
+  }
+
+ 
+  
+
+
+  logout(){
+    localStorage.removeItem(this.userStorageKey);
+    //TODO: remove token
+
+
+    this.userSubject.next(null);
+
+  }
 
   login(email: string, password: string): Observable<any> {
 
@@ -27,20 +50,27 @@ export class AuthService {
     };
 
     if (environment.production) {
-      return this.http.post<[]>(url, data)
+      return this.http.post<any>(url, data)
         .pipe(
           tap(_ => this.log('brr logging in ...')),
-          catchError(this.handleError<[]>('login ' + url, []))
+          map(d => {
+            //if login successful
+            //TODO: save token here
+            localStorage.removeItem(this.userStorageKey);
+            localStorage.setItem(this.userStorageKey, JSON.stringify(d));
+            this.userSubject.next(d);
+            return d;
+
+          }), 
+          catchError(this.handleError<any>('login ' + url, null))
         );
     } else {
-      setTimeout(()=>this.dummy.next(true), 1000);
+      setTimeout(()=>this.dummy.next(true), 500);
+      localStorage.removeItem(this.userStorageKey);
+      localStorage.setItem(this.userStorageKey, JSON.stringify(data));
+      this.userSubject.next(data);
       return this.dummy.asObservable();
     }
-
-
-
-
-
   }
 
 
@@ -62,11 +92,21 @@ export class AuthService {
       return this.http.post<[]>(url, data)
         .pipe(
           tap(_ => this.log('brr signing in ...')),
+          map(d => {
+            //if signin->login successful
+            //TODO: save token here
+            localStorage.setItem(this.userStorageKey, JSON.stringify(d));
+            this.userSubject.next(d);
+
+          }), 
           catchError(this.handleError<[]>('signin ' + url, []))
         );
     } else {
 
-      setTimeout(()=>this.dummy.next(true), 1000);
+      setTimeout(()=>this.dummy.next(true), 500);
+      localStorage.setItem(this.userStorageKey, JSON.stringify(data));
+      this.userSubject.next(data);
+
       return this.dummy.asObservable();
 
     }
