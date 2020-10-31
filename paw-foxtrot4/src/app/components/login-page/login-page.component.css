@@ -1,0 +1,9 @@
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+.tab-content{
+  max-width: 600px;
+  margin:auto;
+  padding:1rem;
+}

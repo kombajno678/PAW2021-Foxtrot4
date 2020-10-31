@@ -62,7 +62,7 @@ export class TestService {
     };
   }
   private log(message: string) {
-    console.log(`AccountService > ${message}`);
+    console.log(`TestService > ${message}`);
   }
 
 

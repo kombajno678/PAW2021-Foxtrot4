@@ -14,11 +14,21 @@ import { MaterialModule } from './material-module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TestComponent } from './components/test/test.component';
+import { LoginPageComponent } from './components/login-page/login-page.component';
+import { LoginFormComponent } from './components/login-page/login-form/login-form.component';
+import { SigninFormComponent } from './components/login-page/signin-form/signin-form.component';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent
+    TestComponent,
+    LoginPageComponent,
+    LoginFormComponent,
+    SigninFormComponent,
   ],
   imports: [
     MaterialModule,
@@ -29,7 +39,9 @@ import { TestComponent } from './components/test/test.component';
     FormsModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
