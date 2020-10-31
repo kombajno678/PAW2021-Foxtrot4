@@ -45,7 +45,9 @@ import { BoardsOverviewComponent } from './components/boards/boards-overview/boa
     FormsModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
