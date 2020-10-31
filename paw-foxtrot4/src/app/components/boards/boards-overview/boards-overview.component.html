@@ -20,7 +20,7 @@
     
                         </mat-card-content>
                         <mat-card-actions>
-                            <button mat-flat-button color="primary">Open</button>
+                            <button mat-flat-button color="primary" (click)="onOpenClick(board)">Open</button>
                             <ng-container *ngIf="!board.archived; else archiveButton">
                                 <button mat-stroked-button >Archive</button>
 

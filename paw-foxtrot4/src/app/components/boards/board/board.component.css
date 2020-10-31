@@ -1,0 +1,16 @@
+.mat-card-list{
+    width:300px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.container-fluid{
+    overflow-x: auto;
+    height: -webkit-fill-available
+
+}
+.all{
+    flex-grow: 1;
+    position: relative;
+    height: -webkit-fill-available;
+    width: 100%;
+}

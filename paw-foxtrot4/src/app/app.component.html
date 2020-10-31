@@ -14,7 +14,7 @@
             <mat-nav-list>
                 <ng-container *ngIf="user">
                     <a (click)="snav.toggle()" mat-list-item routerLink="logout">Log out</a>
-                    <a (click)="snav.toggle()" mat-list-item routerLink="boards">Boards</a>
+                    <a (click)="snav.toggle()" mat-list-item routerLink="allboards">Boards</a>
                 </ng-container>
                 <ng-container *ngIf="!user">
                     <a (click)="snav.toggle()" mat-list-item routerLink="login">Log in / Sign in</a>

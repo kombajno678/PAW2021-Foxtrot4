@@ -1,0 +1,93 @@
+<div class="all">
+
+
+<div class="row p-3 m-0">
+    <div class="col-12 col-md-auto">
+        
+
+        <h1 class="m-0 align-middle">
+            <button mat-icon-button (click)="onBackClick()">
+                <mat-icon>
+                    arrow_back
+                </mat-icon>
+            </button>
+            Board name</h1>
+    </div>
+    <div class="col-auto">
+        <button mat-stroked-button color="primary">
+            random button
+            <mat-icon>
+                thumb_down_alt
+            </mat-icon>
+        </button>
+    </div>
+    <div class="col-auto">
+        <button mat-icon-button color="accent">
+            <mat-icon>
+                mood_bad
+            </mat-icon>
+        </button>
+    </div>
+    <div class="col-auto">
+        <button mat-icon-button color="warn">
+            <mat-icon>
+                priority_high
+            </mat-icon>
+        </button>
+    </div>
+</div>
+
+<div class="container-fluid m-0">
+
+
+
+
+    <div class="row p-0 m-0 flex-row flex-nowrap">
+        <!-- lists -->
+        <ng-container *ngFor="let list of this.getListsSorted()">
+            <div class="col-auto p-1">
+                <mat-card class="mat-card-list mat-elevation-z4">
+                    <mat-card-header>
+                        <mat-card-title>
+                            {{ list.name }}
+                            <button mat-icon-button>
+                                <mat-icon>
+                                    more_vert
+    
+                                </mat-icon>
+                            </button>
+                            
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            pos:{{ list.position }}
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+
+                        <ng-container *ngFor="let card of list.cards">
+
+                            <mat-card class="mat-card-card mat-elevation-z5 m-1">
+
+                                {{ card.name }}
+                            </mat-card>
+
+                        </ng-container>
+
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-button class="w-100" color="accent">New card</button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </ng-container>
+
+        <div class="col-auto p-1">
+            <mat-card class="mat-card-list mat-elevation-z1">
+                <button mat-button class="w-100" color="accent">New list</button>
+            </mat-card>
+        </div>
+
+    </div>
+</div>
+
+</div>

@@ -21,6 +21,7 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
 import { MainPageComponent } from './components/main-page/main-page.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { BoardsOverviewComponent } from './components/boards/boards-overview/boards-overview.component';
+import { BoardComponent } from './components/boards/board/board.component';
 
 
 
@@ -35,6 +36,7 @@ import { BoardsOverviewComponent } from './components/boards/boards-overview/boa
     MainPageComponent,
     LogoutComponent,
     BoardsOverviewComponent,
+    BoardComponent,
   ],
   imports: [
     MaterialModule,

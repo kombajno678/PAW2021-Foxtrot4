@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-boards-overview',
@@ -32,9 +33,15 @@ export class BoardsOverviewComponent implements OnInit {
     },
   ]
 
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit(): void {
+  }
+
+  onOpenClick(board){
+    console.log('opening board ', board.name);
+    this.router.navigate(['/board']);
+    
   }
 
 }
