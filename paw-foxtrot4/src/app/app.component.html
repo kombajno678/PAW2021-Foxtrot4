@@ -8,10 +8,17 @@
     <mat-sidenav-container class="example-sidenav-container">
         <mat-sidenav #snav [mode]="'over'" fixedTopGap="56">
             <mat-nav-list>
-                <a mat-list-item routerLink=".">xdxdxdxdxdxdxdxd xdxd</a>
-                <a mat-list-item routerLink=".">xdxdxdxdxdxdxdxd xdxd</a>
-                <a mat-list-item routerLink=".">xdxdxdxdxdxdxdxd xdxd</a>
-                <a mat-list-item routerLink=".">xdxdxdxdxdxdxdxd xdxd</a>
+                <ng-container *ngIf="user">
+                    <a (click)="snav.toggle()" mat-list-item routerLink="logout">Log out</a>
+                    <a (click)="snav.toggle()" mat-list-item routerLink="boards">Boards</a>
+                </ng-container>
+                <ng-container *ngIf="!user">
+                    <a (click)="snav.toggle()" mat-list-item routerLink="login">Log in / Sign in</a>
+                </ng-container>
+                <mat-divider></mat-divider>
+                <a (click)="snav.toggle()" mat-list-item routerLink="test">test</a>
+                <a (click)="snav.toggle()" mat-list-item routerLink=".">brrr</a>
+                <a (click)="snav.toggle()" mat-list-item routerLink=".">brrr</a>
             </mat-nav-list>
         </mat-sidenav>
         

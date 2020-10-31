@@ -1,0 +1,45 @@
+<div>
+    
+    <div class="boards-container">
+        <div class="row justify-content-start no-gutters">
+            <div class="col">
+                <h2>Your boards:</h2>
+            </div>
+        </div>
+        <div class="row justify-content-start no-gutters">
+
+            <ng-container *ngFor="let board of this.boards">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-1">
+                    <mat-card class="board-card ">
+                        <mat-card-header class="text-truncate">
+                            <mat-card-title class=" w-100 text-truncate {{board.archived ? 'board-archived' : ''}}">
+                                {{board.name}}
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+    
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-flat-button color="primary">Open</button>
+                            <ng-container *ngIf="!board.archived; else archiveButton">
+                                <button mat-stroked-button >Archive</button>
+
+                            </ng-container>
+                            <ng-template #archiveButton>
+                                <button mat-stroked-button >Activate</button>
+
+                            </ng-template>
+                        </mat-card-actions>
+                    </mat-card>
+                </div>
+    
+    
+    
+            </ng-container>
+        </div>
+    </div>
+    
+
+
+
+</div>

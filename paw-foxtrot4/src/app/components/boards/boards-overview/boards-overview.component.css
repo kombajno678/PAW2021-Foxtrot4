@@ -1,0 +1,12 @@
+.board-card{
+    /*width:300px;*/
+}
+
+.boards-container{
+    padding:1rem;
+    max-width:900px;
+    margin:auto;
+}
+.board-archived{
+    color:rgba(255, 255, 255, 0.5);
+}
