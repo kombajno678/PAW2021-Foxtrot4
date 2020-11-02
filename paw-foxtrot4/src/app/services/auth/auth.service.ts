@@ -12,6 +12,7 @@ export class AuthService {
 
   private apiUrl = environment.apiUrl;
 
+  private prod:boolean = true;
   dummy = new Subject<any>();
 
   userStorageKey:string = 'user';
@@ -39,17 +40,17 @@ export class AuthService {
 
   }
 
-  login(email: string, password: string): Observable<any> {
+  login(login: string, password: string): Observable<any> {
 
     //TODO: fill log in api endpoint
-    let url = this.apiUrl + '/login';
+    let url = this.apiUrl + '/auth/login';
 
     let data = {
-      email: email,
+      login: login,
       password: password,
     };
 
-    if (environment.production) {
+    if (environment.production || this.prod) {
       return this.http.post<any>(url, data)
         .pipe(
           tap(_ => this.log('brr logging in ...')),
@@ -57,9 +58,9 @@ export class AuthService {
             //if login successful
             //TODO: save token here
             localStorage.removeItem(this.userStorageKey);
-            localStorage.setItem(this.userStorageKey, JSON.stringify(d));
-            this.userSubject.next(d);
-            return d;
+            localStorage.setItem(this.userStorageKey, d.accessToken);
+            this.userSubject.next(d.accessToken);
+            return true;
 
           }), 
           catchError(this.handleError<any>('login ' + url, null))
@@ -75,12 +76,13 @@ export class AuthService {
 
 
 
-  signin(email: string, first: string, last: string, password: string): Observable<any> {
+  signin(login:string, email: string, first: string, last: string, password: string): Observable<any> {
 
     //TODO: fill sing in api endpoint
-    let url = this.apiUrl + '/signin';
+    let url = this.apiUrl + '/auth/register';
 
     let data = {
+      login: login, 
       email: email,
       firstName: first,
       lastName: last,
@@ -88,24 +90,14 @@ export class AuthService {
 
     };
 
-    if (environment.production) {
-      return this.http.post<[]>(url, data)
+    if (environment.production || this.prod) {
+      return this.http.post<any>(url, data)
         .pipe(
           tap(_ => this.log('brr signing in ...')),
-          map(d => {
-            //if signin->login successful
-            //TODO: save token here
-            localStorage.setItem(this.userStorageKey, JSON.stringify(d));
-            this.userSubject.next(d);
-
-          }), 
-          catchError(this.handleError<[]>('signin ' + url, []))
+          catchError(this.handleError<any>('signin ' + url, null))
         );
     } else {
-
-      setTimeout(()=>this.dummy.next(true), 500);
-      localStorage.setItem(this.userStorageKey, JSON.stringify(data));
-      this.userSubject.next(data);
+      this.userSubject.next('OK');
 
       return this.dummy.asObservable();
 
@@ -123,7 +115,7 @@ export class AuthService {
       console.error(error); // log to console instead
 
       // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
+      this.log(`${operation} failed: ${error.message}, result: \"${result}\"`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);

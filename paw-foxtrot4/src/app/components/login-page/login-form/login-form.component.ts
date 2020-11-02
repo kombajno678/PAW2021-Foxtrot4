@@ -38,7 +38,7 @@ export class LoginFormComponent implements OnInit {
   ) {
     this.form = new FormGroup(
       {
-        email : new FormControl(null, [Validators.required, Validators.email]),
+        login : new FormControl(null, [Validators.required, Validators.maxLength(50), Validators.pattern('[a-zA-Z0-9-]+')]),
         password : new FormControl(null, [Validators.required]),
       }
     )
@@ -55,26 +55,26 @@ export class LoginFormComponent implements OnInit {
   formSend(){
     if(this.form.valid){
       //ok
-      let email = this.form.controls.email.value;
+      let login = this.form.controls.login.value;
       let pass = this.form.controls.password.value;
 
-      this.form.controls.email.disable();
+      this.form.controls.login.disable();
       this.form.controls.password.disable();
       this.loading = true;
 
-      this.authService.login(email, pass).subscribe(r => {
+      this.authService.login(login, pass).subscribe(r => {
         console.log('login result : ', r);
 
         //TODO api can return why login failed, user does not exist or wrong password
 
-        if(r === true){
+        if(r){
           this.openSnackBarSubject.next("Login successful");
 
           setTimeout( () => this.router.navigate(['/']), 1000);
 
         }else{
           this.openSnackBarSubject.next("Error, login failed");
-          this.form.controls.email.enable();
+          this.form.controls.login.enable();
           this.form.controls.password.enable();
           this.loading = false;
 
@@ -84,7 +84,7 @@ export class LoginFormComponent implements OnInit {
 
     }else{
       this.openSnackBarSubject.next("Error, invalid data in form");
-      this.form.controls.email.enable();
+      this.form.controls.login.enable();
       this.form.controls.password.enable();
 
     }

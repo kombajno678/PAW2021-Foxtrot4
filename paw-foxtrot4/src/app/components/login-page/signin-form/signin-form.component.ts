@@ -36,6 +36,7 @@ export class SigninFormComponent implements OnInit {
   ) {
     this.form = new FormGroup(
       {
+        login : new FormControl(null, [Validators.required, Validators.maxLength(50), Validators.pattern('[a-zA-Z0-9-]+')]),
         email : new FormControl(null, [Validators.required, Validators.email]),
         first : new FormControl(null, [Validators.required]),
         last : new FormControl(null, [Validators.required]),
@@ -54,12 +55,14 @@ export class SigninFormComponent implements OnInit {
   enableForm(enabled:boolean){
 
     if(enabled){
+      this.form.controls.login.enable();
       this.form.controls.email.enable();
       this.form.controls.first.enable();
       this.form.controls.last.enable();
       this.form.controls.password.enable();
       this.form.controls.password_confirm.enable();
     }else{
+      this.form.controls.login.disable();
       this.form.controls.email.disable();
       this.form.controls.first.disable();
       this.form.controls.last.disable();
@@ -75,6 +78,7 @@ export class SigninFormComponent implements OnInit {
   formSend(){
     if(this.form.valid){
       //ok
+      let login = this.form.controls.login.value;
       let email = this.form.controls.email.value;
       let first = this.form.controls.first.value;
       let last = this.form.controls.last.value;
@@ -83,14 +87,15 @@ export class SigninFormComponent implements OnInit {
       this.enableForm(false);
       this.loading = true;
 
-      this.authService.signin(email, first, last, pass).subscribe(r => {
+      this.authService.signin(login, email, first, last, pass).subscribe(r => {
         console.log('signin result : ', r);
+        
 
         //TODO api can return why signin failed, user already exists or sth else
 
-        if(r === true){
-          this.openSnackBarSubject.next("Sign in successful");
-          setTimeout(() => this.router.navigate(['/']), 1000);
+        if(r){
+          this.openSnackBarSubject.next("Sign in successful, you can now log in");
+          //setTimeout(() => this.router.navigate(['/']), 1000);
 
         }else{
           this.openSnackBarSubject.next("Error, signin failed");
