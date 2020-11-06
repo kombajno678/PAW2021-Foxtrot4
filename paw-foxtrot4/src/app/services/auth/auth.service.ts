@@ -12,10 +12,11 @@ export class AuthService {
 
   private apiUrl = environment.apiUrl;
 
-  private prod:boolean = true;
+  private prod:boolean = false;
   dummy = new Subject<any>();
 
   userStorageKey:string = 'user';
+  refreshStorageKey:string = 'refresh';
 
   private userSubject: BehaviorSubject<any>;
   public user: Observable<any>;
@@ -23,7 +24,7 @@ export class AuthService {
 
 
   constructor(private http: HttpClient) {
-    this.userSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem(this.userStorageKey)));
+    this.userSubject = new BehaviorSubject<any>(localStorage.getItem(this.userStorageKey));
     this.user = this.userSubject.asObservable();
   }
 
@@ -34,9 +35,28 @@ export class AuthService {
   logout(){
     localStorage.removeItem(this.userStorageKey);
     //TODO: remove token
-
-
     this.userSubject.next(null);
+
+    /*
+
+    let url = this.apiUrl + '/auth/logout';
+
+    return this.http.get<any>(url)
+        .pipe(
+          tap(_ => this.log('brr logging in ...')),
+          map(d => {
+            //if login successful
+            //TODO: save token here
+            localStorage.removeItem(this.userStorageKey);
+            localStorage.setItem(this.userStorageKey, d.accessToken);
+            this.userSubject.next(d.accessToken);
+            return true;
+
+          }), 
+          catchError(this.handleError<any>('login ' + url, null))
+        );
+
+        */
 
   }
 
@@ -56,9 +76,15 @@ export class AuthService {
           tap(_ => this.log('brr logging in ...')),
           map(d => {
             //if login successful
-            //TODO: save token here
+
+
             localStorage.removeItem(this.userStorageKey);
             localStorage.setItem(this.userStorageKey, d.accessToken);
+            
+            localStorage.removeItem(this.refreshStorageKey);
+            localStorage.setItem(this.refreshStorageKey, d.refreshToken);
+
+
             this.userSubject.next(d.accessToken);
             return true;
 

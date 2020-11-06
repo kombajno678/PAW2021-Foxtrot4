@@ -1,0 +1,21 @@
+<mat-card class="board-card ">
+    <mat-card-header class="text-truncate">
+        <mat-card-title class=" w-100 text-truncate {{board.archived ? 'board-archived' : ''}}">
+            {{board.board_name}}
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="onOpenClick()">Open</button>
+        <ng-container *ngIf="!board.archived; else archiveButton">
+            <button mat-stroked-button (click)="onArchiveClick()">Archive</button>
+
+        </ng-container>
+        <ng-template #archiveButton>
+            <button mat-stroked-button (click)="onActivateClick()" >Activate</button>
+
+        </ng-template>
+    </mat-card-actions>
+</mat-card>

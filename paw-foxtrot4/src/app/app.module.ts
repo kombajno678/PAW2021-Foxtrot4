@@ -13,23 +13,27 @@ import { MaterialModule } from './material-module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TestComponent } from './components/test/test.component';
-import { LoginPageComponent } from './components/login-page/login-page.component';
-import { LoginFormComponent } from './components/login-page/login-form/login-form.component';
-import { SigninFormComponent } from './components/login-page/signin-form/signin-form.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { SigninFormComponent } from './components/signin-form/signin-form.component';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
-import { MainPageComponent } from './components/main-page/main-page.component';
+import { MainPageComponent } from './pages/main-page/main-page.component';
 import { LogoutComponent } from './components/logout/logout.component';
-import { BoardsOverviewComponent } from './components/boards/boards-overview/boards-overview.component';
-import { BoardComponent } from './components/boards/board/board.component';
+import { BoardsOverviewComponent } from './pages/boards-overview/boards-overview.component';
+import { BoardComponent } from './pages/board/board.component';
+
+import { JwtModule } from '@auth0/angular-jwt';
+import { BoardCardComponent } from './components/boards/board-card/board-card.component';
+import { LoadingSpinnerComponent } from './components/misc/loading-spinner/loading-spinner.component';
 
 
-
+function tokenGetter(){
+  return localStorage.getItem('user');
+}
 
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent,
     LoginPageComponent,
     LoginFormComponent,
     SigninFormComponent,
@@ -37,6 +41,8 @@ import { BoardComponent } from './components/boards/board/board.component';
     LogoutComponent,
     BoardsOverviewComponent,
     BoardComponent,
+    BoardCardComponent,
+    LoadingSpinnerComponent,
   ],
   imports: [
     MaterialModule,
@@ -45,7 +51,15 @@ import { BoardComponent } from './components/boards/board/board.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter : tokenGetter,
+        allowedDomains : ['localhost:5000'],
+        disallowedRoutes : [],
+
+      }
+    }),
   ],
   providers: [
     {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
@@ -54,6 +68,8 @@ import { BoardComponent } from './components/boards/board/board.component';
 })
 export class AppModule { }
 
-
+/*
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
+
+  */
