@@ -5,9 +5,10 @@
 
 
         </div>
+
     </div>
 
-    
+
     <ng-container *ngIf="this.boards; else loading">
 
         <ng-container *ngIf="anyActiveBoards(); else no_active_boards">
@@ -15,17 +16,24 @@
 
                 <ng-container *ngFor="let board of getActiveBoards()">
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-1">
-                        <app-board-card [board]="board" (onBoardOpen)="openBoard($event)"
-                            (onBoardActivate)="onActivateClick($event)" (onBoardArchive)="onArchiveClick($event)">
+                        <app-board-card [board]="board"
+                                        (onBoardOpen)="openBoard($event)"
+                                        (onBoardActivate)="onActivateClick($event)"
+                                        (onBoardArchive)="onArchiveClick($event)">
                         </app-board-card>
                     </div>
                 </ng-container>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-1">
+                    <app-board-card [board]="null"
+                                    (onBoardCreate)="createBoard($event)">
+                    </app-board-card>
+                </div>
             </div>
         </ng-container>
         <ng-template #no_active_boards>
             <div class="mat-caption">No boards :(</div>
         </ng-template>
-        
+
 
         <ng-container *ngIf="anyArchivedBoards()">
             <div class="row justify-content-start no-gutters">
@@ -35,17 +43,19 @@
                 </div>
             </div>
             <div class="row justify-content-start no-gutters">
-    
+
                 <ng-container *ngFor="let board of getArchivedBoards()">
                     <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-1">
-                        <app-board-card [board]="board" (onBoardOpen)="openBoard($event)"
-                            (onBoardActivate)="onActivateClick($event)" (onBoardArchive)="onArchiveClick($event)">
+                        <app-board-card [board]="board"
+                                        (onBoardOpen)="openBoard($event)"
+                                        (onBoardActivate)="onActivateClick($event)"
+                                        (onBoardArchive)="onArchiveClick($event)">
                         </app-board-card>
                     </div>
                 </ng-container>
             </div>
         </ng-container>
-        
+
 
 
     </ng-container>

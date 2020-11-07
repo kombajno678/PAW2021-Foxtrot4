@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { CreateBoardDialogComponent } from 'src/app/components/boards/create-board-dialog/create-board-dialog.component';
 import { Board } from 'src/app/models/board';
 import { BoardsService } from 'src/app/services/boards/boards.service';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
@@ -11,67 +13,108 @@ import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 })
 export class BoardsOverviewComponent implements OnInit {
 
-  boards:Board[] = null;
+  boards: Board[] = null;
 
 
   constructor(
-    private router:Router,
-    private boardsService:BoardsService,
-    private snackbar:SnackbarService) { }
+    private router: Router,
+    private boardsService: BoardsService,
+    private snackbar: SnackbarService,
+    public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.update();
   }
 
-  update(){
-    this.boardsService.getBoards().subscribe(boards =>{
+  update() {
+    this.boardsService.getBoards().subscribe(boards => {
       this.boards = boards;
     })
   }
 
-  getActiveBoards():Board[]{
+  getActiveBoards(): Board[] {
     return this.boards.filter(b => !b.archived);
   }
-  getArchivedBoards():Board[]{
+  getArchivedBoards(): Board[] {
     return this.boards.filter(b => b.archived);
   }
 
-  anyActiveBoards():boolean{
+  anyActiveBoards(): boolean {
     return this.boards.find(b => !b.archived) ? true : false;
   }
 
-  anyArchivedBoards():boolean{
+  anyArchivedBoards(): boolean {
     return this.boards.find(b => b.archived) ? true : false;
   }
 
 
-  openBoard(event){
-    console.log('user wants to open board : ', event);
-    let board = event;
-    this.router.navigate(['/board'], { queryParams: { id: board.id }});
+  createBoard(event) {
+    console.log('user wants to create new board');
+    //open dialog
+
+    const dialogRef = this.dialog.open(CreateBoardDialogComponent, {
+      width: '250px',
+      data: null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed, : ', result);
+      if (result) {
+        console.log('sending reuest ... ');
+        let tempBoard = new Board();
+        tempBoard.board_name = result;
+        tempBoard.visibility = 'yes';
+        this.boardsService.addBoard(tempBoard).subscribe(r => {
+          console.log('addBoard result = ', r);;
+          if (r) {
+            this.snackbar.openSnackBar(`Board "${r.board_name}" has been created!`);
+            this.update();
+          } else {
+            this.snackbar.openSnackBar('There has been an error while crating a new board :(');
+          }
+        })
+      }
+    });
+
+    //CreateBoardDialogComponent
+
+    //get boardname from dialog
+    //send request to create board
+    //display snackbar
+    //update boards
+
   }
 
 
-  onArchiveClick(event){
+
+
+  openBoard(event) {
+    console.log('user wants to open board : ', event);
     let board = event;
-    this.boardsService.archiveBoard(board).subscribe(r =>{
-      if(r){
+    this.router.navigate(['/board'], { queryParams: { id: board.id } });
+  }
+
+
+  onArchiveClick(event) {
+    let board = event;
+    this.boardsService.archiveBoard(board).subscribe(r => {
+      if (r) {
         console.log('board archived');
         this.snackbar.openSnackBar('Board archived');
-      }else{
+      } else {
         console.error('error while archiving board');
         this.snackbar.openSnackBar('Error while archiving board');
       }
     })
   }
 
-  onActivateClick(event){
+  onActivateClick(event) {
     let board = event;
-    this.boardsService.restoreBoard(board).subscribe(r =>{
-      if(r){
+    this.boardsService.restoreBoard(board).subscribe(r => {
+      if (r) {
         console.log('board restored');
         this.snackbar.openSnackBar('Board restored');
-      }else{
+      } else {
         console.error('error while restoring board');
         this.snackbar.openSnackBar('Error while restoring board');
       }

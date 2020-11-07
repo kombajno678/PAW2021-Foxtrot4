@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Board } from 'src/app/models/board';
 
 @Component({
@@ -19,12 +20,23 @@ export class BoardCardComponent implements OnInit {
 
   @Output()
   onBoardActivate:EventEmitter<Board>;
+
+  @Output()
+  onBoardCreate:EventEmitter<null>;
+
+
+  form:FormGroup;
   
 
   constructor() {
-    this.onBoardOpen = new EventEmitter<Board>()
-    this.onBoardArchive = new EventEmitter<Board>()
-    this.onBoardActivate = new EventEmitter<Board>()
+    this.onBoardOpen = new EventEmitter<Board>();
+    this.onBoardArchive = new EventEmitter<Board>();
+    this.onBoardActivate = new EventEmitter<Board>();
+    this.onBoardCreate = new EventEmitter<null>();
+
+    this.form = new FormGroup({
+      board_name: new FormControl(null, [Validators.required, Validators.pattern(new RegExp('[A-Za-z0-9_-]+'))]),
+    })
 
   }
 
@@ -42,6 +54,10 @@ export class BoardCardComponent implements OnInit {
   onActivateClick(){
     this.onBoardActivate.emit(this.board);
 
+  }
+
+  onCreateClick(){
+    this.onBoardCreate.emit();
   }
 
 }

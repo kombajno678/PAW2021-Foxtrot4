@@ -25,6 +25,7 @@ import { BoardComponent } from './pages/board/board.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { BoardCardComponent } from './components/boards/board-card/board-card.component';
 import { LoadingSpinnerComponent } from './components/misc/loading-spinner/loading-spinner.component';
+import { CreateBoardDialogComponent } from './components/boards/create-board-dialog/create-board-dialog.component';
 
 
 function tokenGetter(){
@@ -43,6 +44,7 @@ function tokenGetter(){
     BoardComponent,
     BoardCardComponent,
     LoadingSpinnerComponent,
+    CreateBoardDialogComponent,
   ],
   imports: [
     MaterialModule,
