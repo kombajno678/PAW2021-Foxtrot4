@@ -10,54 +10,58 @@ import { Board } from 'src/app/models/board';
 export class BoardCardComponent implements OnInit {
 
   @Input()
-  board:Board;
+  board: Board;
 
   @Output()
-  onBoardOpen:EventEmitter<Board>;
+  onBoardOpen: EventEmitter<Board>;
 
   @Output()
-  onBoardArchive:EventEmitter<Board>;
+  onBoardArchive: EventEmitter<Board>;
 
   @Output()
-  onBoardActivate:EventEmitter<Board>;
+  onBoardActivate: EventEmitter<Board>;
 
   @Output()
-  onBoardCreate:EventEmitter<null>;
+  onBoardDelete: EventEmitter<Board>;
+
+  @Output()
+  onBoardCreate: EventEmitter<null>;
 
 
-  form:FormGroup;
-  
+  form: FormGroup;
+
 
   constructor() {
     this.onBoardOpen = new EventEmitter<Board>();
     this.onBoardArchive = new EventEmitter<Board>();
     this.onBoardActivate = new EventEmitter<Board>();
     this.onBoardCreate = new EventEmitter<null>();
-
-    this.form = new FormGroup({
-      board_name: new FormControl(null, [Validators.required, Validators.pattern(new RegExp('[A-Za-z0-9_-]+'))]),
-    })
-
+    this.onBoardDelete = new EventEmitter<Board>();
   }
 
   ngOnInit(): void {
   }
 
-  onOpenClick(){
+  onOpenClick() {
     this.onBoardOpen.emit(this.board);
   }
 
-  onArchiveClick(){
+  onArchiveClick() {
     this.onBoardArchive.emit(this.board);
   }
 
-  onActivateClick(){
+  onActivateClick() {
     this.onBoardActivate.emit(this.board);
 
   }
 
-  onCreateClick(){
+  onCreateClick() {
     this.onBoardCreate.emit();
+  }
+
+  onDeleteClick() {
+    console.log('delete emit');
+    this.onBoardDelete.emit(this.board);
   }
 
 }

@@ -48,6 +48,22 @@ export class BoardsOverviewComponent implements OnInit {
   }
 
 
+
+  deleteBoard(event) {
+    console.log('user wants to delete board : ', event);
+    let board: Board = event;
+
+    this.boardsService.deleteBoard(board).subscribe(r => {
+      console.log('deleteBoard result = ', r);;
+      if (r) {
+        this.snackbar.openSnackBar(`Board "${r.board_name}" has been deleted!`);
+        this.update();
+      } else {
+        this.snackbar.openSnackBar('There has been an error while deleting board :(');
+      }
+    })
+  }
+
   createBoard(event) {
     console.log('user wants to create new board');
     //open dialog
@@ -75,28 +91,16 @@ export class BoardsOverviewComponent implements OnInit {
         })
       }
     });
-
-    //CreateBoardDialogComponent
-
-    //get boardname from dialog
-    //send request to create board
-    //display snackbar
-    //update boards
-
   }
-
-
-
 
   openBoard(event) {
     console.log('user wants to open board : ', event);
-    let board = event;
+    let board: Board = event;
     this.router.navigate(['/board'], { queryParams: { id: board.id } });
   }
 
-
   onArchiveClick(event) {
-    let board = event;
+    let board: Board = event;
     this.boardsService.archiveBoard(board).subscribe(r => {
       if (r) {
         console.log('board archived');
@@ -109,7 +113,7 @@ export class BoardsOverviewComponent implements OnInit {
   }
 
   onActivateClick(event) {
-    let board = event;
+    let board: Board = event;
     this.boardsService.restoreBoard(board).subscribe(r => {
       if (r) {
         console.log('board restored');
@@ -121,7 +125,5 @@ export class BoardsOverviewComponent implements OnInit {
     })
 
   }
-
-
 
 }

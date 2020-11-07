@@ -19,7 +19,8 @@
                         <app-board-card [board]="board"
                                         (onBoardOpen)="openBoard($event)"
                                         (onBoardActivate)="onActivateClick($event)"
-                                        (onBoardArchive)="onArchiveClick($event)">
+                                        (onBoardArchive)="onArchiveClick($event)"
+                                        (onBoardDelete)="deleteBoard($event)">
                         </app-board-card>
                     </div>
                 </ng-container>

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Board } from 'src/app/models/board';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class BoardsService {
 
   }
 
-  getBoard(id:number): Observable<Board>{
+  getBoard(id: number): Observable<Board> {
 
     // TODO: get only single board, but api is not ready yet
 
@@ -36,7 +36,7 @@ export class BoardsService {
     return this.http.get<Board[]>(url)
       .pipe(
         tap(_ => this.log('retreived board')),
-        map(boards => boards.find(b => b.id == id)), 
+        map(boards => boards.find(b => b.id == id)),
         catchError(this.handleError<Board>('getBoard ' + url, null))
       );
   }
@@ -63,7 +63,7 @@ export class BoardsService {
         map(result => {
           board.archived = true;
           return board;
-        }), 
+        }),
         catchError(this.handleError<Board>('archiveBoard ' + url, null))
       );
   }
@@ -79,14 +79,20 @@ export class BoardsService {
         map(result => {
           board.archived = false;
           return board;
-        }), 
+        }),
         catchError(this.handleError<Board>('restoreBoard ' + url, null))
       );
   }
 
 
   deleteBoard(board: Board): Observable<Board> {
-    return null;
+
+    // TODO: api not ready yet
+
+    let dummy = new Subject<any>();
+
+    dummy.next(false);
+    return dummy.asObservable();
   }
 
 
