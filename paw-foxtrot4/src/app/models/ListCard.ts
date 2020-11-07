@@ -3,6 +3,7 @@ export class ListCard {
     card_title: string;
     content: string;
     archived: boolean;
+    position: number;
 
     //created_at
 
@@ -20,9 +21,10 @@ export class ListCard {
 
     //cover
 
-    constructor(title: string, content: string) {
+    constructor(title: string, content: string, position: number) {
         this.card_title = title;
         this.content = content;
+        this.position = position;
         this.archived = false;
     }
 

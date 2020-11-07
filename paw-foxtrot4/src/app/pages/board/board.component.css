@@ -16,6 +16,10 @@
   width: 100%;
 }
 
+.list-cards {
+  min-height: 2rem;
+}
+
 .example-list {
   /*width: 1000px;*/
   max-width: 100%;

@@ -52,7 +52,8 @@
              cdkDropList
              cdkDropListOrientation="horizontal"
              class="example-list"
-             (cdkDropListDropped)="dropList($event)">
+             (cdkDropListDropped)="dropList($event)"
+             cdkDropListGroup>
             <!-- lists -->
 
 
@@ -61,13 +62,15 @@
             <ng-container *ngFor="let list of this.getListsSorted()">
                 <div class="col-auto p-1">
                     <mat-card cdkDrag
+                              [cdkDragData]="list"
                               class="mat-card-list mat-elevation-z4">
                         <mat-card-header>
                             <mat-card-title cdkDragHandle>
                                 {{ list.list_name }}
-                                <button mat-icon-button>
+                                <button mat-icon-button
+                                        (click)="onListDeleteClick(list)">
                                     <mat-icon>
-                                        more_vert
+                                        delete
 
                                     </mat-icon>
                                 </button>
@@ -82,18 +85,45 @@
                             <div class="row p-0 m-0 flex-row flex-nowrap"
                                  cdkDropList
                                  cdkDropListOrientation="vertical"
-                                 class=""
+                                 class="list-cards"
+                                 [cdkDropListData]="list.cards"
+                                 [cdkDropListConnectedTo]
                                  (cdkDropListDropped)="dropCard($event, list)">
 
                                 <ng-container *ngFor="let card of list.cards">
 
                                     <mat-card cdkDrag
+                                              [cdkDragData]="card"
                                               class="mat-card-card mat-elevation-z5 m-1">
 
-                                        {{ card.card_title }}
+                                        <mat-card-header>
+                                            <mat-card-title>
+
+                                                {{ card.card_title }}
+                                                <button mat-icon-button
+                                                        (click)="onCardDeleteClick(list, card)">
+                                                    <mat-icon>
+                                                        delete
+
+                                                    </mat-icon>
+                                                </button>
+                                            </mat-card-title>
+                                            <mat-card-subtitle>
+                                                pos:{{ card.position }}
+                                            </mat-card-subtitle>
+
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            {{ card.content }}
+                                        </mat-card-content>
+
                                     </mat-card>
 
+
                                 </ng-container>
+
+
+
                             </div>
 
 
@@ -101,7 +131,8 @@
                         <mat-card-actions>
                             <button mat-button
                                     class="w-100"
-                                    color="accent">New card</button>
+                                    color="accent"
+                                    (click)="onNewCardClick(list)">New card</button>
                         </mat-card-actions>
                     </mat-card>
                 </div>
@@ -114,7 +145,8 @@
                 <mat-card class="mat-card-list mat-elevation-z1">
                     <button mat-button
                             class="w-100"
-                            color="accent">New list</button>
+                            color="accent"
+                            (click)="onNewListClick()">New list</button>
                 </mat-card>
             </div>
 

@@ -1,4 +1,4 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { _COALESCED_STYLE_SCHEDULER } from '@angular/cdk/table';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,9 +27,9 @@ export class BoardComponent implements OnInit {
     //this.exampleLists.push(new BoardList('ghj', 4));
 
     this.exampleLists.forEach(l => {
-      l.cards.push(new ListCard('randomCard', 'asdasdasdasdasdasdasdasd'));
-      l.cards.push(new ListCard('randomCard 2', 'asdasdasdasdasdasdasdasd'));
-      l.cards.push(new ListCard('randomCard 3', 'asdasdasdasdasdasdasdasd'));
+      l.cards.push(new ListCard('randomCard 1', 'card from ' + l.list_name, 1));
+      l.cards.push(new ListCard('randomCard 2', 'card from ' + l.list_name, 2));
+      l.cards.push(new ListCard('randomCard 3', 'card from ' + l.list_name, 3));
     })
   }
 
@@ -54,13 +54,29 @@ export class BoardComponent implements OnInit {
     this.board.lists[event.previousIndex].position = event.currentIndex + 1;
     this.board.lists[event.currentIndex].position = event.previousIndex + 1;
     moveItemInArray(this.board.lists, event.previousIndex, event.currentIndex);
+    //TODO: send updated positions
+
   }
 
-  dropCard(event, list: BoardList) {
-    console.log('dropCard : ', event);
-    moveItemInArray(list.cards, event.previousIndex, event.currentIndex);
+  dropCard(event: CdkDragDrop<BoardList[]>) {
+    console.log(event);
 
 
+
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      event.container.data.forEach((d, i, a) => d.position = i + 1);
+    } else {
+
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+      event.container.data.forEach((d, i, a) => d.position = i + 1);
+
+      event.previousContainer.data.forEach((d, i, a) => d.position = i + 1);
+    }
+    //TODO: send updated positions
   }
 
 
@@ -102,6 +118,29 @@ export class BoardComponent implements OnInit {
       }
     })
 
+  }
+
+
+  onNewCardClick(list: BoardList) {
+    list.cards.push(new ListCard('new card ' + new Date().getUTCSeconds(), 'card from ' + list.list_name, list.cards.length + 1))
+  }
+
+  onNewListClick() {
+    this.board.lists.push(new BoardList('new list', this.board.lists.length + 1));
+  }
+
+  onListDeleteClick(list) {
+    let index = this.board.lists.indexOf(list);
+    if (index > -1) {
+      this.board.lists.splice(index, 1);
+    }
+  }
+
+  onCardDeleteClick(list, card) {
+    let index = list.cards.indexOf(card);
+    if (index > -1) {
+      list.cards.splice(index, 1);
+    }
   }
 
 }
