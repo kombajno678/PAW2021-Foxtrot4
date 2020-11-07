@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CreateBoardDialogComponent } from 'src/app/components/boards/create-board-dialog/create-board-dialog.component';
-import { Board } from 'src/app/models/board';
+import { Board } from 'src/app/models/Board';
 import { BoardsService } from 'src/app/services/boards/boards.service';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 

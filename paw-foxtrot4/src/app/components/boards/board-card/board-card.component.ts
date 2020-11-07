@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Board } from 'src/app/models/board';
+import { Board } from 'src/app/models/Board';
 
 @Component({
   selector: 'app-board-card',

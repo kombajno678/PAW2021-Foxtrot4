@@ -4,7 +4,8 @@
         <div class="row p-3 m-0">
             <div class="col-12 col-md-auto">
                 <h1 class="m-0 align-middle">
-                    <button mat-icon-button (click)="onBackClick()">
+                    <button mat-icon-button
+                            (click)="onBackClick()">
                         <mat-icon>
                             arrow_back
                         </mat-icon>
@@ -15,23 +16,27 @@
 
             <div class="col-auto">
                 <ng-container *ngIf="!board.archived; else archiveButton">
-                    <button mat-stroked-button (click)="onArchiveClick()">Archive</button>
+                    <button mat-stroked-button
+                            (click)="onArchiveClick()">Archive</button>
 
                 </ng-container>
                 <ng-template #archiveButton>
-                    <button mat-stroked-button (click)="onActivateClick()">Activate</button>
+                    <button mat-stroked-button
+                            (click)="onActivateClick()">Activate</button>
 
                 </ng-template>
             </div>
             <div class="col-auto">
-                <button mat-icon-button color="accent">
+                <button mat-icon-button
+                        color="accent">
                     <mat-icon>
                         mood_bad
                     </mat-icon>
                 </button>
             </div>
             <div class="col-auto">
-                <button mat-icon-button color="warn">
+                <button mat-icon-button
+                        color="warn">
                     <mat-icon>
                         priority_high
                     </mat-icon>
@@ -39,57 +44,80 @@
             </div>
         </div>
 
-        <div class=" m-0">
 
 
 
 
-            <div class="row p-0 m-0 flex-row flex-nowrap">
-                <!-- lists -->
-                <ng-container *ngFor="let list of this.getListsSorted()">
-                    <div class="col-auto p-1">
-                        <mat-card class="mat-card-list mat-elevation-z4">
-                            <mat-card-header>
-                                <mat-card-title>
-                                    {{ list.name }}
-                                    <button mat-icon-button>
-                                        <mat-icon>
-                                            more_vert
+        <div class="row p-0 m-0 flex-row flex-nowrap"
+             cdkDropList
+             cdkDropListOrientation="horizontal"
+             class="example-list"
+             (cdkDropListDropped)="dropList($event)">
+            <!-- lists -->
 
-                                        </mat-icon>
-                                    </button>
 
-                                </mat-card-title>
-                                <mat-card-subtitle>
-                                    pos:{{ list.position }}
-                                </mat-card-subtitle>
-                            </mat-card-header>
-                            <mat-card-content>
+
+
+            <ng-container *ngFor="let list of this.getListsSorted()">
+                <div class="col-auto p-1">
+                    <mat-card cdkDrag
+                              class="mat-card-list mat-elevation-z4">
+                        <mat-card-header>
+                            <mat-card-title cdkDragHandle>
+                                {{ list.list_name }}
+                                <button mat-icon-button>
+                                    <mat-icon>
+                                        more_vert
+
+                                    </mat-icon>
+                                </button>
+
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                                pos:{{ list.position }}
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+
+                            <div class="row p-0 m-0 flex-row flex-nowrap"
+                                 cdkDropList
+                                 cdkDropListOrientation="vertical"
+                                 class=""
+                                 (cdkDropListDropped)="dropCard($event, list)">
 
                                 <ng-container *ngFor="let card of list.cards">
 
-                                    <mat-card class="mat-card-card mat-elevation-z5 m-1">
+                                    <mat-card cdkDrag
+                                              class="mat-card-card mat-elevation-z5 m-1">
 
-                                        {{ card.name }}
+                                        {{ card.card_title }}
                                     </mat-card>
 
                                 </ng-container>
+                            </div>
 
-                            </mat-card-content>
-                            <mat-card-actions>
-                                <button mat-button class="w-100" color="accent">New card</button>
-                            </mat-card-actions>
-                        </mat-card>
-                    </div>
-                </ng-container>
 
-                <div class="col-auto p-1">
-                    <mat-card class="mat-card-list mat-elevation-z1">
-                        <button mat-button class="w-100" color="accent">New list</button>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-button
+                                    class="w-100"
+                                    color="accent">New card</button>
+                        </mat-card-actions>
                     </mat-card>
                 </div>
+            </ng-container>
 
+
+
+
+            <div class="col-auto p-1">
+                <mat-card class="mat-card-list mat-elevation-z1">
+                    <button mat-button
+                            class="w-100"
+                            color="accent">New list</button>
+                </mat-card>
             </div>
+
         </div>
     </ng-container>
 
