@@ -2,11 +2,15 @@ import { ListCard } from './ListCard';
 
 export class BoardList {
 
+    id: number;
+
     list_name: string;
 
     archived: boolean;
 
     position: number;
+
+    board_id?: number;
 
     //created_at
 

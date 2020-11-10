@@ -1,9 +1,12 @@
 export class ListCard {
 
-    card_title: string;
-    content: string;
+    id: number;
+
+    card_name: string;
+    content?: string;
     archived: boolean;
     position: number;
+    list_id?: number;
 
     //created_at
 
@@ -22,7 +25,7 @@ export class ListCard {
     //cover
 
     constructor(title: string, content: string, position: number) {
-        this.card_title = title;
+        this.card_name = title;
         this.content = content;
         this.position = position;
         this.archived = false;

@@ -1,7 +1,9 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { _COALESCED_STYLE_SCHEDULER } from '@angular/cdk/table';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CreateBoardDialogComponent } from 'src/app/components/boards/create-board-dialog/create-board-dialog.component';
 import { Board } from 'src/app/models/Board';
 import { BoardList } from 'src/app/models/BoardList';
 import { ListCard } from 'src/app/models/ListCard';
@@ -19,7 +21,12 @@ export class BoardComponent implements OnInit {
 
   exampleLists: BoardList[];
 
-  constructor(private router: Router, private route: ActivatedRoute, private boardsService: BoardsService, private snackbar: SnackbarService) {
+  constructor(
+    public dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute,
+    private boardsService: BoardsService,
+    private snackbar: SnackbarService) {
     this.exampleLists = [];
     this.exampleLists.push(new BoardList('asd', 1));
     this.exampleLists.push(new BoardList('qwe', 2));
@@ -45,7 +52,19 @@ export class BoardComponent implements OnInit {
     this.boardsService.getBoard(this.id).subscribe(board => {
       this.board = board;
       //get lists
-      this.board.lists = this.exampleLists;;
+      if (this.board) {
+        this.boardsService.getLists(this.board).subscribe(lists => {
+          this.board.lists = lists;
+          this.board.lists.forEach(list => {
+            this.boardsService.getCards(this.board, list).subscribe(cards => {
+              list.cards = cards;
+            })
+          })
+        });
+      } else {
+        console.error('this.board = null');
+        this.snackbar.openSnackBar('Could not load this board :(');
+      }
     })
   }
 
@@ -87,7 +106,7 @@ export class BoardComponent implements OnInit {
   }
 
   getListsSorted() {
-    return this.board.lists.sort((a, b) => a.position - b.position);
+    return this.board.lists ? this.board.lists.sort((a, b) => a.position - b.position) : [];
   }
 
   onArchiveClick() {
@@ -121,26 +140,95 @@ export class BoardComponent implements OnInit {
   }
 
 
-  onNewCardClick(list: BoardList) {
-    list.cards.push(new ListCard('new card ' + new Date().getUTCSeconds(), 'card from ' + list.list_name, list.cards.length + 1))
-  }
+
 
   onNewListClick() {
-    this.board.lists.push(new BoardList('new list', this.board.lists.length + 1));
+
+
+    const dialogRef = this.dialog.open(CreateBoardDialogComponent, {
+      width: '250px',
+      data: { message: 'Enter list name', itemName: 'List name' }
+    });
+
+    dialogRef.afterClosed().subscribe(listName => {
+      console.log('The dialog was closed, : ', listName);
+      if (listName) {
+        console.log('sending reuest ... ');
+        this.boardsService.addList(this.board, listName).subscribe(createdList => {
+          if (createdList) {
+            this.snackbar.openSnackBar('Success');
+            createdList.cards = [];
+            this.board.lists.push(createdList);
+          } else {
+            this.snackbar.openSnackBar('Error :(');
+          }
+        })
+      }
+    });
   }
 
   onListDeleteClick(list) {
-    let index = this.board.lists.indexOf(list);
-    if (index > -1) {
-      this.board.lists.splice(index, 1);
-    }
+    this.boardsService.deleteList(this.board, list).subscribe(r => {
+      if (r) {
+
+        this.snackbar.openSnackBar('Success');
+        let index = this.board.lists.indexOf(list);
+        if (index > -1) {
+          this.board.lists.splice(index, 1);
+        }
+
+      } else {
+        this.snackbar.openSnackBar('Error :(');
+      }
+    })
+
+
+
+  }
+
+  onNewCardClick(list: BoardList) {
+
+
+    const dialogRef = this.dialog.open(CreateBoardDialogComponent, {
+      width: '250px',
+      data: { message: 'Enter card title', itemName: 'Card title' }
+    });
+
+    dialogRef.afterClosed().subscribe(cardName => {
+      console.log('The dialog was closed, : ', cardName);
+      if (cardName) {
+        console.log('sending reuest ... ');
+        this.boardsService.addCard(this.board, list, cardName).subscribe(createdCard => {
+          if (createdCard) {
+            this.snackbar.openSnackBar('Success');
+            list.cards.push(createdCard);
+          } else {
+            this.snackbar.openSnackBar('Error :(');
+          }
+        })
+      }
+    });
+
+
+
+
+
   }
 
   onCardDeleteClick(list, card) {
-    let index = list.cards.indexOf(card);
-    if (index > -1) {
-      list.cards.splice(index, 1);
-    }
+
+    this.boardsService.deleteCard(this.board, list, card).subscribe(r => {
+      if (r) {
+        this.snackbar.openSnackBar('Success');
+        let index = list.cards.indexOf(card);
+        if (index > -1) {
+          list.cards.splice(index, 1);
+        }
+
+      } else {
+        this.snackbar.openSnackBar('Error :(');
+      }
+    })
   }
 
 }

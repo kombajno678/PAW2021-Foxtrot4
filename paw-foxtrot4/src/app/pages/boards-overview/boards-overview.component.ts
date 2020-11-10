@@ -70,7 +70,7 @@ export class BoardsOverviewComponent implements OnInit {
 
     const dialogRef = this.dialog.open(CreateBoardDialogComponent, {
       width: '250px',
-      data: null
+      data: { message: 'Enter board name', itemName: 'Board name' }
     });
 
     dialogRef.afterClosed().subscribe(result => {

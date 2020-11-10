@@ -12,11 +12,11 @@ export class AuthService {
 
   private apiUrl = environment.apiUrl;
 
-  private prod:boolean = false;
+  private prod: boolean = true;//true -> use api, false -> use dummy
   dummy = new Subject<any>();
 
-  userStorageKey:string = 'user';
-  refreshStorageKey:string = 'refresh';
+  userStorageKey: string = 'user';
+  refreshStorageKey: string = 'refresh';
 
   private userSubject: BehaviorSubject<any>;
   public user: Observable<any>;
@@ -28,11 +28,11 @@ export class AuthService {
     this.user = this.userSubject.asObservable();
   }
 
- 
-  
 
 
-  logout(){
+
+
+  logout() {
     localStorage.removeItem(this.userStorageKey);
     //TODO: remove token
     this.userSubject.next(null);
@@ -80,7 +80,7 @@ export class AuthService {
 
             localStorage.removeItem(this.userStorageKey);
             localStorage.setItem(this.userStorageKey, d.accessToken);
-            
+
             localStorage.removeItem(this.refreshStorageKey);
             localStorage.setItem(this.refreshStorageKey, d.refreshToken);
 
@@ -88,11 +88,11 @@ export class AuthService {
             this.userSubject.next(d.accessToken);
             return true;
 
-          }), 
+          }),
           catchError(this.handleError<any>('login ' + url, null))
         );
     } else {
-      setTimeout(()=>this.dummy.next(true), 500);
+      setTimeout(() => this.dummy.next(true), 500);
       localStorage.removeItem(this.userStorageKey);
       localStorage.setItem(this.userStorageKey, JSON.stringify(data));
       this.userSubject.next(data);
@@ -102,16 +102,16 @@ export class AuthService {
 
 
 
-  signin(login:string, email: string, first: string, last: string, password: string): Observable<any> {
+  signin(login: string, email: string, first: string, last: string, password: string): Observable<any> {
 
     //TODO: fill sing in api endpoint
     let url = this.apiUrl + '/auth/register';
 
     let data = {
-      login: login, 
+      login: login,
       email: email,
-      firstName: first,
-      lastName: last,
+      first_name: first,
+      last_name: last,
       password: password,
 
     };
@@ -123,6 +123,7 @@ export class AuthService {
           catchError(this.handleError<any>('signin ' + url, null))
         );
     } else {
+      console.log('signin test mode');
       this.userSubject.next('OK');
 
       return this.dummy.asObservable();

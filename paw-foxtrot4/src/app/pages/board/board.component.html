@@ -68,7 +68,8 @@
                             <mat-card-title cdkDragHandle>
                                 {{ list.list_name }}
                                 <button mat-icon-button
-                                        (click)="onListDeleteClick(list)">
+                                        (click)="onListDeleteClick(list)"
+                                        [disabled]="list.cards.length >= 1">
                                     <mat-icon>
                                         delete
 
@@ -99,7 +100,7 @@
                                         <mat-card-header>
                                             <mat-card-title>
 
-                                                {{ card.card_title }}
+                                                {{ card.card_name }}
                                                 <button mat-icon-button
                                                         (click)="onCardDeleteClick(list, card)">
                                                     <mat-icon>
@@ -113,9 +114,11 @@
                                             </mat-card-subtitle>
 
                                         </mat-card-header>
+                                        <!--
                                         <mat-card-content>
-                                            {{ card.content }}
+                                            {{ card.content ? card.content : '' }}
                                         </mat-card-content>
+                                        -->
 
                                     </mat-card>
 
