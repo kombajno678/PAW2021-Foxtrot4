@@ -1,1 +1,1 @@
-export const apiUrl = 'http://example-api.com';
+export const apiUrl = 'https://foxtrot4-backend.herokuapp.com';

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -27,6 +27,7 @@ import { BoardCardComponent } from './components/boards/board-card/board-card.co
 import { LoadingSpinnerComponent } from './components/misc/loading-spinner/loading-spinner.component';
 import { CreateBoardDialogComponent } from './components/boards/create-board-dialog/create-board-dialog.component';
 
+import { environment } from 'src/environments/environment';
 
 function tokenGetter() {
   return localStorage.getItem('user');
@@ -57,9 +58,8 @@ function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:5000', 'https://foxtrot4-backend.herokuapp.com'],
+        allowedDomains: ['localhost:5000', environment.apiUrl, environment.apiUrl.replace('https://', '')],
         disallowedRoutes: [],
-
       }
     }),
   ],
@@ -68,7 +68,12 @@ function tokenGetter() {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    let allowedDomains = ['localhost:5000', environment.apiUrl, environment.apiUrl.replace('https://', '')];
+    console.warn('allowedDomains : ', allowedDomains)
+  }
+}
 
 /*
 platformBrowserDynamic().bootstrapModule(AppModule)
