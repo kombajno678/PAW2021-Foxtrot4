@@ -3,11 +3,11 @@ const path = require('path');
 const app = express();
 
 // Serve static files....
-app.use(express.static(__dirname + '/dist/flask-test'));
+app.use(express.static(__dirname + '/dist/paw-foxtrot4'));
 
 // Send all requests to index.html
-app.get('/*', function(req, res) {
-  res.sendFile(path.join(__dirname + '/dist/flask-test/index.html'));
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname + '/dist/paw-foxtrot4/index.html'));
 });
 
 // default Heroku PORT
