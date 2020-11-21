@@ -28,6 +28,7 @@ import { LoadingSpinnerComponent } from './components/misc/loading-spinner/loadi
 import { CreateBoardDialogComponent } from './components/boards/create-board-dialog/create-board-dialog.component';
 
 import { environment } from 'src/environments/environment';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 function tokenGetter() {
   return localStorage.getItem('user');
@@ -46,6 +47,7 @@ function tokenGetter() {
     BoardCardComponent,
     LoadingSpinnerComponent,
     CreateBoardDialogComponent,
+    ProfileComponent,
   ],
   imports: [
     MaterialModule,

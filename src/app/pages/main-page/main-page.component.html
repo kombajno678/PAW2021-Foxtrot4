@@ -24,7 +24,7 @@
             </a>
 
             <a mat-raised-button
-               routerLink="signin"
+               routerLink="profile"
                class="w-100"
                color="primary">
                 <span class="mat-headline">
@@ -59,7 +59,8 @@
 
 
             <a mat-raised-button
-               routerLink="signin"
+               [routerLink]="'/signin'"
+               [queryParams]="{tab:1}"
                class="w-100 signin"
                color="primary">
                 <span class="mat-headline">

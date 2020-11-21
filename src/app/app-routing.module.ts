@@ -6,6 +6,7 @@ import { BoardsOverviewComponent } from './pages/boards-overview/boards-overview
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { MainPageComponent } from './pages/main-page/main-page.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
     path: 'board',
     component: BoardComponent,
     pathMatch: 'prefix',
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
   },
   {
     path: '',

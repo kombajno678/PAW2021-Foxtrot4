@@ -1,4 +1,7 @@
-<mat-tab-group mat-align-tabs="start" class="" dynamicHeight>
+<mat-tab-group [selectedIndex]="tab"
+               mat-align-tabs="start"
+               class=""
+               dynamicHeight>
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon class="example-tab-icon">person</mat-icon>
