@@ -1,0 +1,61 @@
+a {
+  margin-top: 2rem;
+  padding: 0.5rem;
+  text-decoration: none;
+  font-weight: 800 !important;
+
+  transition: all 0.25s ease-in-out 0s;
+  -moz-transition: all 0.25s ease-in-out 0s;
+  -webkit-transition: all 0.25s ease-in-out 0s;
+  -o-transition: all 0.25s ease-in-out 0s;
+  /*opacity: 0.75;*/
+
+  border: none
+}
+
+a:hover {
+  box-shadow: 0 0 9px 4px rgb(255 255 255);
+}
+
+a {
+  background: #f12711;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #f5af19, #f12711);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #f5af19, #f12711);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+a.login {
+  background: rgb(254, 225, 64);
+  background: linear-gradient(234deg, rgba(254, 225, 64, 1) 0%, rgba(250, 112, 154, 1) 100%);
+  color: black !important;
+}
+
+a.signin {
+  background: #c31432;
+  background: -webkit-linear-gradient(to right, #240b36, #c31432);
+  background: linear-gradient(to right, #240b36, #c31432);
+
+}
+
+
+
+.title-col {
+  max-width: 300px;
+}
+
+.main {
+
+  background: rgb(227, 0, 249);
+  background: linear-gradient(137deg, rgba(227, 0, 249, 1) 0%, rgba(0, 212, 255, 1) 100%);
+
+}
+
+.main.loggedin {
+  background: #12c2e9;
+  background: -webkit-linear-gradient(to right, #f64f59, #c471ed, #12c2e9);
+  background: linear-gradient(to right, #f64f59, #c471ed, #12c2e9);
+
+}

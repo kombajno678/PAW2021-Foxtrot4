@@ -13,6 +13,11 @@ const routes: Routes = [
     component: LoginPageComponent
   },
   {
+    path: 'signin',
+    component: LoginPageComponent,
+
+  },
+  {
     path: 'logout',
     component: LogoutComponent
   },

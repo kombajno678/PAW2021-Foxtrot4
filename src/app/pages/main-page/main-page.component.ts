@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -9,11 +10,12 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class MainPageComponent implements OnInit {
 
 
-  user:any;
+  user: any;
 
-  constructor(private authService:AuthService) {
+  constructor(private authService: AuthService, private jwt: JwtHelperService) {
     this.authService.user.subscribe(u => {
-      this.user = u;
+      this.user = this.jwt.decodeToken(u);
+
     })
   }
 

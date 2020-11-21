@@ -1,33 +1,41 @@
 <div class="example-container">
 
-    <mat-toolbar color="accent" class="example-toolbar">
-        <button mat-icon-button (click)="snav.toggle()">
+    <mat-toolbar class="example-toolbar">
+        <button mat-icon-button
+                (click)="snav.toggle()">
             <mat-icon>menu</mat-icon>
         </button>
-        
-        <h1 class="example-app-name"> Trecllone </h1>
+
+        <h1 class="example-app-name"> </h1>
 
     </mat-toolbar>
 
-    <mat-sidenav-container class="example-sidenav-container">
-        <mat-sidenav #snav [mode]="'over'" fixedTopGap="56">
+    <mat-sidenav-container class="example-sidenav-container h-100">
+        <mat-sidenav #snav
+                     [mode]="'over'"
+                     fixedTopGap="56">
             <mat-nav-list>
-                <a (click)="snav.toggle()" mat-list-item routerLink="">Home</a>
+                <a (click)="snav.toggle()"
+                   mat-list-item
+                   routerLink="">Home</a>
                 <ng-container *ngIf="user">
-                    <a (click)="snav.toggle()" mat-list-item routerLink="logout">Log out</a>
-                    <a (click)="snav.toggle()" mat-list-item routerLink="allboards">Boards</a>
+                    <a (click)="snav.toggle()"
+                       mat-list-item
+                       routerLink="logout">Log out</a>
+                    <a (click)="snav.toggle()"
+                       mat-list-item
+                       routerLink="allboards">Boards</a>
                 </ng-container>
                 <ng-container *ngIf="!user">
-                    <a (click)="snav.toggle()" mat-list-item routerLink="login">Log in / Sign in</a>
+                    <a (click)="snav.toggle()"
+                       mat-list-item
+                       routerLink="login">Log in / Sign in</a>
                 </ng-container>
-                <mat-divider></mat-divider>
-                <a (click)="snav.toggle()" mat-list-item routerLink="test">test</a>
-                <a (click)="snav.toggle()" mat-list-item routerLink=".">brrr</a>
-                <a (click)="snav.toggle()" mat-list-item routerLink=".">brrr</a>
+
             </mat-nav-list>
         </mat-sidenav>
 
-        <mat-sidenav-content>
+        <mat-sidenav-content class="h-100">
             <router-outlet></router-outlet>
         </mat-sidenav-content>
     </mat-sidenav-container>

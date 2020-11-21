@@ -9,5 +9,18 @@
 /*@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";*/
 
 
-html, body { height: 100%; }
-body { margin: 0;  }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
