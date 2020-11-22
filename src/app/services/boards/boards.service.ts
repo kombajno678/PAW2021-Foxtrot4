@@ -188,6 +188,8 @@ export class BoardsService {
 
   }
 
+  //to be deprecated
+
   archiveList(board: Board, list: BoardList): Observable<BoardList> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/archive`;
 
@@ -203,6 +205,8 @@ export class BoardsService {
 
   }
 
+
+  //to be deprecated
   restoreList(board: Board, list: BoardList): Observable<BoardList> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/restore`;
 
@@ -228,10 +232,48 @@ export class BoardsService {
       );
   }
 
-  updateListPosition() {
-    //api not ready
-    return null;
+
+
+
+
+  updateList(board: Board, list: BoardList): Observable<BoardList> {
+
+    let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}`;
+
+
+    return this.http.put<BoardList>(url, list).pipe(
+      tap(_ => this.log('updateList result : ' + JSON.stringify(_))),
+      catchError(this.handleError<any>('updateList ' + url, null))
+    );
+
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //==================================================
+
+
+
+
+
+
+
+
+
+
+
 
   addCard(board: Board, list: BoardList, card_name: string): Observable<ListCard> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/add`;
@@ -279,6 +321,7 @@ export class BoardsService {
         catchError(this.handleError<any>('deleteCard ' + url, null))
       );
   }
+  //to be deprecated
 
   archiveCard(board: Board, list: BoardList, card: ListCard): Observable<ListCard> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/${card.id}/archive`;
@@ -294,6 +337,7 @@ export class BoardsService {
       );
   }
 
+  //to be deprecated
   restoreCard(board: Board, list: BoardList, card: ListCard): Observable<ListCard> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/${card.id}/restore`;
 
@@ -308,9 +352,20 @@ export class BoardsService {
       );
   }
 
-  updateCardPosition() {
-    //api not ready
-    return null;
+
+  //APi not ready yet
+  updateCard(board: Board, list: BoardList, card: ListCard): Observable<ListCard> {
+
+
+    let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/${card.id}`;
+
+    return this.http.put<ListCard>(url, card)
+      .pipe(
+        tap(_ => this.log('updateCard result : ' + JSON.stringify(_))),
+        catchError(this.handleError<any>('updateCard ' + url, null))
+      );
+
+
   }
 
 

@@ -11,6 +11,8 @@ import { ListCard } from 'src/app/models/ListCard';
 import { BoardsService } from 'src/app/services/boards/boards.service';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
+import { CardComponent } from 'src/app/components/dialogs/card/card.component';
+
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -57,9 +59,8 @@ export class BoardComponent implements OnInit {
       }
     }
 
-    //TODO update board in backend
     this.boardsService.updateBoard(this.board).subscribe(r => {
-      if (r) {
+      if (r && r.color === this.board.color) {
         this.snackbar.openSnackBar('Color changed!');
       } else {
 
@@ -149,32 +150,31 @@ export class BoardComponent implements OnInit {
   }
 
   onArchiveClick() {
-    this.boardsService.archiveBoard(this.board).subscribe(r => {
+
+    this.board.archived = true;
+    this.boardsService.updateBoard(this.board).subscribe(r => {
       if (r) {
-        console.log('board archived');
         this.snackbar.openSnackBar('Board archived');
-
-        this.board = r;
       } else {
-        console.error('error while archiving board');
         this.snackbar.openSnackBar('Error while archiving board');
-
+        this.board.archived = false;
       }
     })
+
   }
 
   onActivateClick() {
-    this.boardsService.restoreBoard(this.board).subscribe(r => {
-      if (r) {
-        console.log('board restored');
-        this.snackbar.openSnackBar('Board restored');
-        this.board = r;
-      } else {
-        console.error('error while restoring board');
-        this.snackbar.openSnackBar('Error while restoring board');
 
+    this.board.archived = false;
+    this.boardsService.updateBoard(this.board).subscribe(r => {
+      if (r) {
+        this.snackbar.openSnackBar('Board restored');
+      } else {
+        this.snackbar.openSnackBar('Error while restoring board');
+        this.board.archived = true;
       }
     })
+
 
   }
 
@@ -231,18 +231,134 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  onListDeleteClick(list) {
-    this.boardsService.deleteList(this.board, list).subscribe(r => {
+  onListRenameClick(list: BoardList) {
+
+
+    //open dialog for creating new operation
+    let dialogRef = this.dialog.open(ChangeValueComponent, { width: '300px', data: { msg: 'Rename list', value: list.list_name } });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let new_name: string = result;
+        let old_name = list.list_name;
+        list.list_name = new_name;
+
+        this.boardsService.updateBoard(this.board).subscribe(r => {
+          if (r) {
+            this.snackbar.openSnackBar('List renamed to: ' + new_name);
+          } else {
+            this.snackbar.openSnackBar('Error!');
+            list.list_name = old_name;
+          }
+        })
+      }
+    })
+
+
+  }
+
+
+  setListArchivedState(list: BoardList, archivedState: boolean) {
+    let old_state = list.archived;
+    list.archived = archivedState;
+    this.boardsService.updateList(this.board, list).subscribe(r => {
       if (r) {
-
-        this.snackbar.openSnackBar('Success');
-        let index = this.board.lists.indexOf(list);
-        if (index > -1) {
-          this.board.lists.splice(index, 1);
-        }
-
+        this.snackbar.openSnackBar('List ' + list.archived ? 'archived' : 'restored');
       } else {
-        this.snackbar.openSnackBar('Error :(');
+        this.snackbar.openSnackBar('Error');
+        list.archived = old_state;
+      }
+    })
+  }
+
+
+
+  onListDeleteClick(list) {
+
+    if (confirm('Are You sure?')) {
+
+      this.boardsService.deleteList(this.board, list).subscribe(r => {
+        if (r) {
+
+          this.snackbar.openSnackBar('Success');
+          let index = this.board.lists.indexOf(list);
+          if (index > -1) {
+            this.board.lists.splice(index, 1);
+          }
+
+        } else {
+          this.snackbar.openSnackBar('Error :(');
+        }
+      })
+
+    }
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  onCardNameClick(list: BoardList, card: ListCard) {
+
+    //open card dialog
+
+
+    let dialogRef = this.dialog.open(CardComponent, { width: '100%', data: { board: this.board, list: list, card: card } });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+
+    })
+
+
+
+
+  }
+
+  setCardArchivedState(list: BoardList, card: ListCard, archivedState: boolean) {
+    let old_state = card.archived;
+    card.archived = archivedState;
+    this.boardsService.updateCard(this.board, list, card).subscribe(r => {
+      if (r) {
+        this.snackbar.openSnackBar('Card ' + card.archived ? 'archived' : 'restored');
+      } else {
+        this.snackbar.openSnackBar('Error');
+        card.archived = old_state;
+      }
+    })
+  }
+
+  onCardRenameClick(list: BoardList, card: ListCard) {
+
+
+    //open dialog for creating new operation
+    let dialogRef = this.dialog.open(ChangeValueComponent, { width: '300px', data: { msg: 'Rename card', value: card.card_name } });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let new_name: string = result;
+        let old_name = card.card_name;
+        card.card_name = new_name;
+
+        this.boardsService.updateCard(this.board, list, card).subscribe(r => {
+          if (r) {
+            this.snackbar.openSnackBar('Card renamed to: ' + new_name);
+          } else {
+            this.snackbar.openSnackBar('Error!');
+            card.card_name = old_name;
+          }
+        })
       }
     })
 
@@ -281,18 +397,22 @@ export class BoardComponent implements OnInit {
 
   onCardDeleteClick(list, card) {
 
-    this.boardsService.deleteCard(this.board, list, card).subscribe(r => {
-      if (r) {
-        this.snackbar.openSnackBar('Success');
-        let index = list.cards.indexOf(card);
-        if (index > -1) {
-          list.cards.splice(index, 1);
-        }
+    if (confirm('Are You sure?')) {
+      this.boardsService.deleteCard(this.board, list, card).subscribe(r => {
+        if (r) {
+          this.snackbar.openSnackBar('Success');
+          let index = list.cards.indexOf(card);
+          if (index > -1) {
+            list.cards.splice(index, 1);
+          }
 
-      } else {
-        this.snackbar.openSnackBar('Error :(');
-      }
-    })
+        } else {
+          this.snackbar.openSnackBar('Error :(');
+        }
+      })
+    }
+
+
   }
 
 }

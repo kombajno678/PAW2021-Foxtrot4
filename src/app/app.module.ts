@@ -30,6 +30,7 @@ import { CreateBoardDialogComponent } from './components/boards/create-board-dia
 import { environment } from 'src/environments/environment';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ChangeValueComponent } from './components/dialogs/change-value/change-value.component';
+import { CardComponent } from './components/dialogs/card/card.component';
 
 function tokenGetter() {
   return localStorage.getItem('user');
@@ -50,6 +51,7 @@ function tokenGetter() {
     CreateBoardDialogComponent,
     ProfileComponent,
     ChangeValueComponent,
+    CardComponent,
   ],
   imports: [
     MaterialModule,

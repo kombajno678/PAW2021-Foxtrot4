@@ -1,0 +1,58 @@
+<h1 mat-dialog-title>
+    <mat-icon>
+        web_asset
+    </mat-icon>{{ card?.card_name }}
+</h1>
+
+
+
+
+<mat-dialog-content>
+
+
+
+    <mat-icon>
+        format_align_justify
+    </mat-icon>
+
+
+
+    <p>
+        {{ card?.content }}
+    </p>
+
+
+
+
+
+
+
+
+    <form [formGroup]="form">
+
+
+        <div class="row">
+            <div class="col">
+
+                <mat-form-field appearance="fill"
+                                class="w-100">
+
+                    <input matInput
+                           formControlName="content">
+
+                </mat-form-field>
+
+
+            </div>
+        </div>
+
+    </form>
+
+    <button type="button"
+            mat-button
+            (click)="onSave()">
+        Save
+    </button>
+
+
+</mat-dialog-content>

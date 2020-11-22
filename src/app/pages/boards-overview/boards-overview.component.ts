@@ -23,7 +23,10 @@ export class BoardsOverviewComponent implements OnInit {
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.update();
+    //this.update();
+    this.boardsService.getBoards().subscribe(boards => {
+      this.boards = boards;
+    })
   }
 
   update() {
@@ -57,7 +60,7 @@ export class BoardsOverviewComponent implements OnInit {
       console.log('deleteBoard result = ', r);;
       if (r) {
         this.snackbar.openSnackBar(`Board "${r.board_name}" has been deleted!`);
-        this.update();
+        //this.update();
       } else {
         this.snackbar.openSnackBar('There has been an error while deleting board :(');
       }
@@ -84,7 +87,7 @@ export class BoardsOverviewComponent implements OnInit {
           console.log('addBoard result = ', r);;
           if (r) {
             this.snackbar.openSnackBar(`Board "${r.board_name}" has been created!`);
-            this.update();
+            //this.update();
           } else {
             this.snackbar.openSnackBar('There has been an error while crating a new board :(');
           }
