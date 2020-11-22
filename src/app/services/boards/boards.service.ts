@@ -18,7 +18,7 @@ export class BoardsService {
   constructor(private http: HttpClient) {
     this.boardsPath = this.apiUrl + '/boards';
     this.allBoards = new BehaviorSubject<Board[]>(null);
-    this.updateBoards();
+    this.refreshBoards();
 
   }
 
@@ -27,7 +27,7 @@ export class BoardsService {
 
 
 
-  updateBoards() {
+  refreshBoards() {
 
 
     this.http.get<Board[]>(this.boardsPath)
@@ -65,7 +65,7 @@ export class BoardsService {
       .pipe(
         tap(_ => {
           this.log('addBoard result : ' + JSON.stringify(_));
-          this.updateBoards();
+          this.refreshBoards();
         }),
         catchError(this.handleError<Board>('addBoard ' + url, null))
       );
@@ -80,7 +80,7 @@ export class BoardsService {
       .pipe(
         tap(_ => {
           this.log('archiveBoard result : ' + JSON.stringify(_));
-          this.updateBoards();
+          this.refreshBoards();
         }),
         map(result => {
           board.archived = true;
@@ -99,7 +99,7 @@ export class BoardsService {
       .pipe(
         tap(_ => {
           this.log('restoreBoard result : ' + JSON.stringify(_));
-          this.updateBoards();
+          this.refreshBoards();
         }),
         map(result => {
           board.archived = false;
@@ -112,10 +112,10 @@ export class BoardsService {
   updateBoard(board: Board): Observable<Board> {
 
 
-    return this.http.put<Board>(this.boardsPath, board).pipe(
+    return this.http.put<Board>(this.boardsPath + '/' + board.id, board).pipe(
       tap(_ => {
         this.log('updateBoard result : ' + JSON.stringify(_));
-        this.updateBoards();
+        this.refreshBoards();
       })
     )
 

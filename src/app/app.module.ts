@@ -29,6 +29,7 @@ import { CreateBoardDialogComponent } from './components/boards/create-board-dia
 
 import { environment } from 'src/environments/environment';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { ChangeValueComponent } from './components/dialogs/change-value/change-value.component';
 
 function tokenGetter() {
   return localStorage.getItem('user');
@@ -48,6 +49,7 @@ function tokenGetter() {
     LoadingSpinnerComponent,
     CreateBoardDialogComponent,
     ProfileComponent,
+    ChangeValueComponent,
   ],
   imports: [
     MaterialModule,

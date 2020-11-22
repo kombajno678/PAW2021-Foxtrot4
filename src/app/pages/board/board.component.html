@@ -16,12 +16,12 @@
 
             <div class="col-auto">
                 <ng-container *ngIf="!board.archived; else archiveButton">
-                    <button mat-stroked-button
+                    <button mat-button
                             (click)="onArchiveClick()">Archive</button>
 
                 </ng-container>
                 <ng-template #archiveButton>
-                    <button mat-stroked-button
+                    <button mat-button
                             (click)="onActivateClick()">Activate</button>
 
                 </ng-template>
@@ -40,11 +40,9 @@
 
             </div>
             <div class="col-auto">
-                <button mat-icon-button
-                        color="warn">
-                    <mat-icon>
-                        priority_high
-                    </mat-icon>
+                <button mat-button
+                        (click)="onRenameClick()">
+                    Rename
                 </button>
             </div>
         </div>

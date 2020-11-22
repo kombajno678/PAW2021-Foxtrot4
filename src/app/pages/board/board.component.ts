@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CreateBoardDialogComponent } from 'src/app/components/boards/create-board-dialog/create-board-dialog.component';
+import { ChangeValueComponent } from 'src/app/components/dialogs/change-value/change-value.component';
 import { Board } from 'src/app/models/Board';
 import { BoardList } from 'src/app/models/BoardList';
 import { ListCard } from 'src/app/models/ListCard';
@@ -57,6 +58,14 @@ export class BoardComponent implements OnInit {
     }
 
     //TODO update board in backend
+    this.boardsService.updateBoard(this.board).subscribe(r => {
+      if (r) {
+        this.snackbar.openSnackBar('Color changed!');
+      } else {
+
+        this.snackbar.openSnackBar('Error!');
+      }
+    })
 
 
     console.log('chenged board color to = ' + this.board.color);
@@ -76,9 +85,9 @@ export class BoardComponent implements OnInit {
 
       //TODO: delete when color saved in db
 
-      if (this.board) {
-        this.board.color = Math.floor(Math.random() * 10);
-      }
+      //if (this.board) {
+      //  this.board.color = Math.floor(Math.random() * 10);
+      //}
 
 
       //get lists
@@ -166,6 +175,31 @@ export class BoardComponent implements OnInit {
 
       }
     })
+
+  }
+
+
+  onRenameClick() {
+
+    //open dialog for creating new operation
+    let dialogRef = this.dialog.open(ChangeValueComponent, { width: '300px', data: { msg: 'Rename board', value: this.board.board_name } });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let new_name: string = result;
+        let old_name = this.board.board_name;
+        this.board.board_name = new_name;
+
+        this.boardsService.updateBoard(this.board).subscribe(r => {
+          if (r) {
+            this.snackbar.openSnackBar('Board renamed to: ' + new_name);
+          } else {
+            this.snackbar.openSnackBar('Error!');
+            this.board.board_name = old_name;
+          }
+        })
+      }
+    })
+
 
   }
 
