@@ -1,4 +1,4 @@
-<div class="all">
+<div class="all board-bg-{{ board?.color }}">
 
     <ng-container *ngIf="this.board; else loading">
         <div class="row p-3 m-0">
@@ -27,12 +27,17 @@
                 </ng-template>
             </div>
             <div class="col-auto">
-                <button mat-icon-button
-                        color="accent">
-                    <mat-icon>
-                        mood_bad
-                    </mat-icon>
-                </button>
+
+                <button mat-button
+                        [matMenuTriggerFor]="colorMenu">Color</button>
+                <mat-menu #colorMenu="matMenu">
+                    <button *ngFor="let color of colors"
+                            mat-menu-item
+                            class="board-bg-{{color}}"
+                            (click)="changeBoardColor(color)"></button>
+                </mat-menu>
+
+
             </div>
             <div class="col-auto">
                 <button mat-icon-button

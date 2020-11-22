@@ -11,6 +11,8 @@ export class Board {
     write: boolean;
     execute: boolean;
 
+    color?: number;//not yet in backend
+
     lists?: BoardList[];
 
 }

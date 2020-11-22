@@ -19,6 +19,8 @@ export class BoardComponent implements OnInit {
   id: number;
   board: Board;
 
+  colors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
   exampleLists: BoardList[];
 
   constructor(
@@ -40,6 +42,26 @@ export class BoardComponent implements OnInit {
     })
   }
 
+  changeBoardColor(color: number = null) {
+    if (color >= 0) {
+      this.board.color = color;
+    } else {
+      if (!this.board.color) {
+        this.board.color = 1;
+      } else {
+        this.board.color++;
+        if (this.board.color > 9) {
+          this.board.color = 0;
+        }
+      }
+    }
+
+    //TODO update board in backend
+
+
+    console.log('chenged board color to = ' + this.board.color);
+  }
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(p => {
       this.id = p.id;
@@ -51,6 +73,14 @@ export class BoardComponent implements OnInit {
   update() {
     this.boardsService.getBoard(this.id).subscribe(board => {
       this.board = board;
+
+      //TODO: delete when color saved in db
+
+      if (this.board) {
+        this.board.color = Math.floor(Math.random() * 10);
+      }
+
+
       //get lists
       if (this.board) {
         this.boardsService.getLists(this.board).subscribe(lists => {

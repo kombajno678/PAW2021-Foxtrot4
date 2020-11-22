@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Board } from 'src/app/models/Board';
-import { Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { BoardList } from 'src/app/models/BoardList';
 import { ListCard } from 'src/app/models/ListCard';
@@ -12,44 +12,61 @@ import { ListCard } from 'src/app/models/ListCard';
 export class BoardsService {
   private apiUrl = environment.apiUrl;
 
+  boardsPath: string;
 
-  constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient) {
+    this.boardsPath = this.apiUrl + '/boards';
+    this.allBoards = new BehaviorSubject<Board[]>(null);
+    this.updateBoards();
+
+  }
+
+
+  allBoards: BehaviorSubject<Board[]>
+
+
+
+  updateBoards() {
+
+
+    this.http.get<Board[]>(this.boardsPath)
+      .pipe(
+        tap(_ => this.log('retreived boards, count : ' + _.length)),
+        catchError(this.handleError<Board[]>('getBoards ' + this.boardsPath, []))
+      ).subscribe(r => {
+        this.allBoards.next(r);
+      })
+
+  }
 
 
   getBoards(): Observable<Board[]> {
-
-    let url = this.apiUrl + '/boards';
-
-    return this.http.get<Board[]>(url)
-      .pipe(
-        tap(_ => this.log('retreived boards, count : ' + _.length)),
-        catchError(this.handleError<Board[]>('getBoards ' + url, []))
-      );
-
-
+    return this.allBoards.asObservable();
   }
 
   getBoard(id: number): Observable<Board> {
 
     // TODO: get only single board, but api is not ready yet
 
-    let url = this.apiUrl + '/boards';
-
-    return this.http.get<Board[]>(url)
+    return this.http.get<Board[]>(this.boardsPath)
       .pipe(
         tap(_ => this.log('retreived board')),
         map(boards => boards.find(b => b.id == id)),
-        catchError(this.handleError<Board>('getBoard ' + url, null))
+        catchError(this.handleError<Board>('getBoard ' + this.boardsPath, null))
       );
   }
 
   addBoard(board: Board): Observable<Board> {
 
-    let url = this.apiUrl + '/boards/add';
+    let url = this.boardsPath + '/add';
 
     return this.http.post<Board>(url, board)
       .pipe(
-        tap(_ => this.log('addBoard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('addBoard result : ' + JSON.stringify(_));
+          this.updateBoards();
+        }),
         catchError(this.handleError<Board>('addBoard ' + url, null))
       );
   }
@@ -57,11 +74,14 @@ export class BoardsService {
 
   archiveBoard(board: Board): Observable<Board> {
 
-    let url = this.apiUrl + '/boards/archive';
+    let url = this.boardsPath + '/archive';
 
     return this.http.post<any>(url, board)
       .pipe(
-        tap(_ => this.log('archiveBoard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('archiveBoard result : ' + JSON.stringify(_));
+          this.updateBoards();
+        }),
         map(result => {
           board.archived = true;
           return board;
@@ -73,17 +93,32 @@ export class BoardsService {
 
   restoreBoard(board: Board): Observable<Board> {
 
-    let url = this.apiUrl + '/boards/restore';
+    let url = this.boardsPath + '/restore';
 
     return this.http.post<any>(url, board)
       .pipe(
-        tap(_ => this.log('restoreBoard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('restoreBoard result : ' + JSON.stringify(_));
+          this.updateBoards();
+        }),
         map(result => {
           board.archived = false;
           return board;
         }),
         catchError(this.handleError<Board>('restoreBoard ' + url, null))
       );
+  }
+
+  updateBoard(board: Board): Observable<Board> {
+
+
+    return this.http.put<Board>(this.boardsPath, board).pipe(
+      tap(_ => {
+        this.log('updateBoard result : ' + JSON.stringify(_));
+        this.updateBoards();
+      })
+    )
+
   }
 
 
@@ -96,6 +131,27 @@ export class BoardsService {
     dummy.next(false);
     return dummy.asObservable();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //=============================================================
+
+
 
 
 

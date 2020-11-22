@@ -40,6 +40,10 @@ export class BoardCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // delete withLatestFrom, when colo rsaved in db
+    if (this.board) {
+      this.board.color = Math.floor(Math.random() * 10);
+    }
   }
 
   onOpenClick() {
