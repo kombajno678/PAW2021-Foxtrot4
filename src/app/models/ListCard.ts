@@ -24,11 +24,13 @@ export class ListCard {
 
     //cover
 
-    constructor(title: string, content: string, position: number) {
+    constructor(id: number, title: string, content: string, position: number, archived: boolean, list_id: number) {
+        this.id = id;
         this.card_name = title;
         this.content = content;
         this.position = position;
-        this.archived = false;
+        this.archived = archived;
+        this.list_id = list_id;
     }
 
 }

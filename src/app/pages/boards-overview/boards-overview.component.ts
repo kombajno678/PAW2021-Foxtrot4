@@ -80,9 +80,8 @@ export class BoardsOverviewComponent implements OnInit {
       console.log('The dialog was closed, : ', result);
       if (result) {
         console.log('sending reuest ... ');
-        let tempBoard = new Board();
-        tempBoard.board_name = result;
-        tempBoard.visibility = 'yes';
+        let tempBoard = new Board(null, result, null, 'yes', false, null, null, null, null);
+
         this.boardsService.addBoard(tempBoard).subscribe(r => {
           console.log('addBoard result = ', r);;
           if (r) {
@@ -95,6 +94,7 @@ export class BoardsOverviewComponent implements OnInit {
       }
     });
   }
+
 
   openBoard(event) {
     console.log('user wants to open board : ', event);

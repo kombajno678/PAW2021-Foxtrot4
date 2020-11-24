@@ -24,52 +24,25 @@ export class BoardComponent implements OnInit {
 
   colors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-  exampleLists: BoardList[];
-
   constructor(
     public dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
     private boardsService: BoardsService,
     private snackbar: SnackbarService) {
-    this.exampleLists = [];
-    this.exampleLists.push(new BoardList('asd', 1));
-    this.exampleLists.push(new BoardList('qwe', 2));
-    this.exampleLists.push(new BoardList('rty', 3));
-    //this.exampleLists.push(new BoardList('ghj', 4));
 
-    this.exampleLists.forEach(l => {
-      l.cards.push(new ListCard('randomCard 1', 'card from ' + l.list_name, 1));
-      l.cards.push(new ListCard('randomCard 2', 'card from ' + l.list_name, 2));
-      l.cards.push(new ListCard('randomCard 3', 'card from ' + l.list_name, 3));
-    })
   }
 
-  changeBoardColor(color: number = null) {
-    if (color >= 0) {
-      this.board.color = color;
-    } else {
-      if (!this.board.color) {
-        this.board.color = 1;
-      } else {
-        this.board.color++;
-        if (this.board.color > 9) {
-          this.board.color = 0;
-        }
-      }
-    }
-
+  changeBoardColor(color: number = 0) {
+    this.board.color = color
     this.boardsService.updateBoard(this.board).subscribe(r => {
       if (r && r.color === this.board.color) {
         this.snackbar.openSnackBar('Color changed!');
       } else {
-
         this.snackbar.openSnackBar('Error!');
       }
     })
 
-
-    console.log('chenged board color to = ' + this.board.color);
   }
 
   ngOnInit(): void {
@@ -84,22 +57,27 @@ export class BoardComponent implements OnInit {
     this.boardsService.getBoard(this.id).subscribe(board => {
       this.board = board;
 
-      //TODO: delete when color saved in db
-
-      //if (this.board) {
-      //  this.board.color = Math.floor(Math.random() * 10);
-      //}
-
-
       //get lists
       if (this.board) {
         this.boardsService.getLists(this.board).subscribe(lists => {
           this.board.lists = lists;
-          this.board.lists.forEach(list => {
-            this.boardsService.getCards(this.board, list).subscribe(cards => {
-              list.cards = cards;
+          if (lists) {
+            // get cards
+            this.board.lists.forEach(list => {
+              this.boardsService.getCards(this.board, list).subscribe(cards => {
+                if (cards) {
+                  list.cards = cards;
+                } else {
+                  console.error('cards = null', this.board, list);
+                  this.snackbar.openSnackBar('Could not load cards of list "' + list.list_name + '" :(');
+                }
+              })
             })
-          })
+          } else {
+            console.error('lists = null', this.board);
+            this.snackbar.openSnackBar('Could not load lists of this board :(');
+          }
+
         });
       } else {
         console.error('this.board = null');
@@ -110,32 +88,74 @@ export class BoardComponent implements OnInit {
 
   dropList(event: CdkDragDrop<BoardList[]>) {
     console.log('dropList : ', event);
-    this.board.lists[event.previousIndex].position = event.currentIndex + 1;
-    this.board.lists[event.currentIndex].position = event.previousIndex + 1;
+    event.container
+    //console.log('before: ', this.board.lists);
+    ///this.board.lists[event.previousIndex].position = event.currentIndex + 1;
+    ///this.board.lists[event.currentIndex].position = event.previousIndex + 1;
     moveItemInArray(this.board.lists, event.previousIndex, event.currentIndex);
-    //TODO: send updated positions
+    event.container.data.forEach((list, i, lists) => {
+
+      if (list.position !== i + 1) {
+        list.position = i + 1;
+        this.boardsService.updateList(this.board, list).subscribe(r => {
+          console.log('update list result = ', r);
+        });
+      }
+
+
+    });
+
 
   }
 
-  dropCard(event: CdkDragDrop<BoardList[]>) {
+  dropCard(event: CdkDragDrop<BoardList>) {
     console.log(event);
 
-
+    let listsToUpdate: BoardList[] = [];
 
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      event.container.data.forEach((d, i, a) => d.position = i + 1);
+      moveItemInArray(event.container.data.cards, event.previousIndex, event.currentIndex);
+
+      listsToUpdate.push(event.container.data);
+
+      event.container.data.cards.forEach((d, i, a) => {
+        if (d.position !== i + 1 || d.list_id !== event.container.data.id) {
+          d.position = i + 1;
+          d.list_id = event.container.data.id;
+          this.boardsService.updateCard(this.board, null, d).subscribe(r => console.log(r));
+        }
+      });
     } else {
 
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
+      transferArrayItem(event.previousContainer.data.cards,
+        event.container.data.cards,
         event.previousIndex,
         event.currentIndex);
-      event.container.data.forEach((d, i, a) => d.position = i + 1);
 
-      event.previousContainer.data.forEach((d, i, a) => d.position = i + 1);
+      listsToUpdate.push(event.container.data);
+      listsToUpdate.push(event.previousContainer.data);
     }
+
+
+
+
+    listsToUpdate.forEach(list => {
+      list.cards.forEach((d, i, a) => {
+        if (d.position !== i + 1 || d.list_id !== list.id) {
+          d.position = i + 1;
+          d.list_id = list.id;
+          this.boardsService.updateCard(this.board, null, d).subscribe(r => console.log(r));
+        }
+      })
+    });
+
+
+
     //TODO: send updated positions
+
+
+
+
   }
 
 
@@ -332,7 +352,7 @@ export class BoardComponent implements OnInit {
     card.archived = archivedState;
     this.boardsService.updateCard(this.board, list, card).subscribe(r => {
       if (r) {
-        this.snackbar.openSnackBar('Card ' + card.archived ? 'archived' : 'restored');
+        this.snackbar.openSnackBar('Card ' + (card.archived ? 'archived' : 'restored'));
       } else {
         this.snackbar.openSnackBar('Error');
         card.archived = old_state;

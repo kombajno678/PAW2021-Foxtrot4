@@ -46,9 +46,6 @@ export class BoardsService {
   }
 
   getBoard(id: number): Observable<Board> {
-
-    // TODO: get only single board, but api is not ready yet
-
     return this.http.get<Board[]>(this.boardsPath)
       .pipe(
         tap(_ => this.log('retreived board')),
@@ -73,40 +70,13 @@ export class BoardsService {
 
 
   archiveBoard(board: Board): Observable<Board> {
-
-    let url = this.boardsPath + '/archive';
-
-    return this.http.post<any>(url, board)
-      .pipe(
-        tap(_ => {
-          this.log('archiveBoard result : ' + JSON.stringify(_));
-          this.refreshBoards();
-        }),
-        map(result => {
-          board.archived = true;
-          return board;
-        }),
-        catchError(this.handleError<Board>('archiveBoard ' + url, null))
-      );
+    board.archived = true;
+    return this.updateBoard(board);
   }
 
-
   restoreBoard(board: Board): Observable<Board> {
-
-    let url = this.boardsPath + '/restore';
-
-    return this.http.post<any>(url, board)
-      .pipe(
-        tap(_ => {
-          this.log('restoreBoard result : ' + JSON.stringify(_));
-          this.refreshBoards();
-        }),
-        map(result => {
-          board.archived = false;
-          return board;
-        }),
-        catchError(this.handleError<Board>('restoreBoard ' + url, null))
-      );
+    board.archived = false;
+    return this.updateBoard(board);
   }
 
   updateBoard(board: Board): Observable<Board> {
@@ -178,7 +148,7 @@ export class BoardsService {
 
     let url = this.apiUrl + `/boards/${board.id}/lists/add`;
 
-    let temp = new BoardList(listName, board.lists ? board.lists.length + 1 : 1);
+    let temp = new BoardList(null, listName, board.lists ? board.lists.length + 1 : 1, false, board.id);
 
     return this.http.post<BoardList>(url, temp)
       .pipe(
@@ -191,34 +161,17 @@ export class BoardsService {
   //to be deprecated
 
   archiveList(board: Board, list: BoardList): Observable<BoardList> {
-    let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/archive`;
-
-    return this.http.post<BoardList>(url, list)
-      .pipe(
-        tap(_ => this.log('archiveList result : ' + JSON.stringify(_))),
-        map(result => {
-          list.archived = true;
-          return list;
-        }),
-        catchError(this.handleError<BoardList>('archiveList ' + url, null))
-      );
+    list.archived = true;
+    return this.updateList(board, list);
 
   }
 
 
   //to be deprecated
   restoreList(board: Board, list: BoardList): Observable<BoardList> {
-    let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/restore`;
+    list.archived = false;
+    return this.updateList(board, list);
 
-    return this.http.post<BoardList>(url, list)
-      .pipe(
-        tap(_ => this.log('restoreList result : ' + JSON.stringify(_))),
-        map(result => {
-          list.archived = false;
-          return list;
-        }),
-        catchError(this.handleError<BoardList>('restoreList ' + url, null))
-      );
 
   }
 
@@ -278,7 +231,7 @@ export class BoardsService {
   addCard(board: Board, list: BoardList, card_name: string): Observable<ListCard> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/add`;
 
-    let temp = new ListCard(card_name, '', list.cards ? list.cards.length + 1 : 1);
+    let temp = new ListCard(null, card_name, '', list.cards ? list.cards.length + 1 : 1, false, list.id);
     //temp.list_id = list.id;
 
     return this.http.post<ListCard>(url, temp)
@@ -357,7 +310,7 @@ export class BoardsService {
   updateCard(board: Board, list: BoardList, card: ListCard): Observable<ListCard> {
 
 
-    let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/${card.id}`;
+    let url = this.apiUrl + `/boards/${board ? board.id : list.board_id}/lists/${list ? list.id : card.list_id}/cards/${card.id}`;
 
     return this.http.put<ListCard>(url, card)
       .pipe(

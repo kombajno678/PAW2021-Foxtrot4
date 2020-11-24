@@ -26,6 +26,30 @@ body {
 }
 
 
+.opacity-0 {
+  opacity: 0%;
+}
+
+.opacity-1 {
+  opacity: 20%;
+}
+
+.opacity-2 {
+  opacity: 40%;
+}
+
+.opacity-3 {
+  opacity: 60%;
+}
+
+.opacity-4 {
+  opacity: 80%;
+}
+
+.opacity-5 {
+  opacity: 100%;
+}
+
 
 
 
