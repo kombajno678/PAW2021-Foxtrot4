@@ -115,23 +115,12 @@ export class BoardComponent implements OnInit {
 
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data.cards, event.previousIndex, event.currentIndex);
-
       listsToUpdate.push(event.container.data);
-
-      event.container.data.cards.forEach((d, i, a) => {
-        if (d.position !== i + 1 || d.list_id !== event.container.data.id) {
-          d.position = i + 1;
-          d.list_id = event.container.data.id;
-          this.boardsService.updateCard(this.board, null, d).subscribe(r => console.log(r));
-        }
-      });
     } else {
-
       transferArrayItem(event.previousContainer.data.cards,
         event.container.data.cards,
         event.previousIndex,
         event.currentIndex);
-
       listsToUpdate.push(event.container.data);
       listsToUpdate.push(event.previousContainer.data);
     }
@@ -141,11 +130,11 @@ export class BoardComponent implements OnInit {
 
     listsToUpdate.forEach(list => {
       list.cards.forEach((d, i, a) => {
-        if (d.position !== i + 1 || d.list_id !== list.id) {
-          d.position = i + 1;
-          d.list_id = list.id;
-          this.boardsService.updateCard(this.board, null, d).subscribe(r => console.log(r));
-        }
+        //if (d.position !== i + 1 || d.list_id !== list.id || listsToUpdate.length > 1) {
+        d.position = i + 1;
+        d.list_id = list.id;
+        this.boardsService.updateCard(this.board, null, d).subscribe(r => console.log(r));
+        //}
       })
     });
 
