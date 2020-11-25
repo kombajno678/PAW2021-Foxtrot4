@@ -51,6 +51,18 @@ body {
 }
 
 
+.visible-on-hover {
+  opacity: 20%;
+}
+
+.visible-on-hover:hover,
+.visible-on-hover:focus,
+.visible-on-hover:active {
+  opacity: 100%;
+}
+
+
+
 
 
 .board-bg-1 {

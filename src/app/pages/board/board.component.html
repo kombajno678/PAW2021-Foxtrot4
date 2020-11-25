@@ -73,7 +73,8 @@
 
                         <div class="row p-0 m-0 w-100">
                             <div class="col-auto">
-                                <mat-icon cdkDragHandle>
+                                <mat-icon cdkDragHandle
+                                          class="visible-on-hover">
                                     drag_handle
                                 </mat-icon>
                             </div>
@@ -82,9 +83,10 @@
                             </div>
                             <div class="col-auto">
                                 <button mat-icon-button
-                                        [matMenuTriggerFor]="menu">
+                                        [matMenuTriggerFor]="menu"
+                                        class="visible-on-hover">
                                     <mat-icon>
-                                        more_vert
+                                        more_horiz
                                     </mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
@@ -93,7 +95,7 @@
 
                                     <button mat-menu-item
                                             [matMenuTriggerFor]="otherBoards">
-                                        <mat-icon>home</mat-icon>
+                                        <mat-icon>content_cut</mat-icon>
                                         <span>Move to another board</span>
                                     </button>
                                     <mat-menu #otherBoards="matMenu">
@@ -155,7 +157,8 @@
 
                                         <div class="row">
                                             <div class="col-auto">
-                                                <mat-icon cdkDragHandle>
+                                                <mat-icon cdkDragHandle
+                                                          class="visible-on-hover">
                                                     drag_handle
                                                 </mat-icon>
 
@@ -168,9 +171,10 @@
                                             </div>
                                             <div class="col-auto">
                                                 <button mat-button
-                                                        [matMenuTriggerFor]="menu">
+                                                        [matMenuTriggerFor]="menu"
+                                                        class="visible-on-hover">
                                                     <mat-icon>
-                                                        more_vert
+                                                        more_horiz
                                                     </mat-icon>
                                                 </button>
                                                 <mat-menu #menu="matMenu">
