@@ -12,6 +12,7 @@ import { BoardsService } from 'src/app/services/boards/boards.service';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 
 import { CardComponent } from 'src/app/components/dialogs/card/card.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -21,6 +22,7 @@ import { CardComponent } from 'src/app/components/dialogs/card/card.component';
 export class BoardComponent implements OnInit {
   id: number;
   board: Board;
+  allBoards$: Observable<Board[]>;
 
   colors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -54,6 +56,10 @@ export class BoardComponent implements OnInit {
   }
 
   update() {
+
+    this.allBoards$ = this.boardsService.getBoards();
+
+
     this.boardsService.getBoard(this.id).subscribe(board => {
       this.board = board;
 
@@ -84,6 +90,23 @@ export class BoardComponent implements OnInit {
         this.snackbar.openSnackBar('Could not load this board :(');
       }
     })
+  }
+
+  moveListToAnotherBoard(list: BoardList, oldBoard: Board, newBoard: Board) {
+
+    let oldBoardId = list.board_id;
+    list.board_id = newBoard.id;
+    this.boardsService.updateList(oldBoard, list).subscribe(r => {
+      console.log('moveListToAnotherBoard result = ', r);
+      if (r) {
+        console.log('success');
+        this.update();
+      } else {
+        console.log('fail');
+        list.board_id = oldBoardId;
+      }
+    })
+
   }
 
   dropList(event: CdkDragDrop<BoardList[]>) {

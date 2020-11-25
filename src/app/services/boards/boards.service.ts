@@ -94,12 +94,16 @@ export class BoardsService {
 
   deleteBoard(board: Board): Observable<Board> {
 
-    // TODO: api not ready yet
+    let url = this.boardsPath + '/' + board.id;
+    return this.http.delete<Board>(url).pipe(
+      tap(_ => {
+        this.log('deleteBoard result' + JSON.stringify(_));
+        this.refreshBoards();
+      }),
+      catchError(this.handleError<Board>('deleteBoard ' + url, null))
 
-    let dummy = new Subject<any>();
+    )
 
-    dummy.next(false);
-    return dummy.asObservable();
   }
 
 
@@ -193,7 +197,7 @@ export class BoardsService {
 
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}`;
 
-
+    console.log('service > updating list : ', list);
     return this.http.put<BoardList>(url, list).pipe(
       tap(_ => this.log('updateList result : ' + JSON.stringify(_))),
       catchError(this.handleError<any>('updateList ' + url, null))

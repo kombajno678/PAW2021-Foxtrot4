@@ -64,7 +64,6 @@ export class BoardCardComponent implements OnInit {
   }
 
   onDeleteClick() {
-    console.log('delete emit');
     this.onBoardDelete.emit(this.board);
   }
 

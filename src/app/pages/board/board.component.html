@@ -92,6 +92,23 @@
 
 
                                     <button mat-menu-item
+                                            [matMenuTriggerFor]="otherBoards">
+                                        <mat-icon>home</mat-icon>
+                                        <span>Move to another board</span>
+                                    </button>
+                                    <mat-menu #otherBoards="matMenu">
+                                        <button *ngFor="let b of this.allBoards$ | async"
+                                                mat-menu-item
+                                                class="board-bg-{{b.color}}"
+                                                [disabled]="b.id === list.board_id"
+                                                (click)="moveListToAnotherBoard(list, this.board, b)">
+                                            {{b.board_name}}
+                                        </button>
+                                    </mat-menu>
+
+
+
+                                    <button mat-menu-item
                                             (click)="setListArchivedState(list, !list.archived)">
                                         <mat-icon>{{ list.archived? 'unarchive' : 'archive' }}</mat-icon>
                                         <span>{{ list.archived? 'Restore' : 'Archive' }}</span>

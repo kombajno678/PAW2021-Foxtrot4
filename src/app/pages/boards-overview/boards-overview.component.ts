@@ -102,6 +102,21 @@ export class BoardsOverviewComponent implements OnInit {
     this.router.navigate(['/board'], { queryParams: { id: board.id } });
   }
 
+  onDeleteBoardClick(event) {
+    console.log('received delete event');
+    let board: Board = event;
+    this.boardsService.deleteBoard(board).subscribe(r => {
+      console.log(r);
+      if (r) {
+        console.log('board deleted');
+        this.snackbar.openSnackBar('Board deleted');
+      } else {
+        console.error('error while deleting board');
+        this.snackbar.openSnackBar('Error while deleting board');
+      }
+    });
+  }
+
   onArchiveClick(event) {
     let board: Board = event;
     this.boardsService.archiveBoard(board).subscribe(r => {
