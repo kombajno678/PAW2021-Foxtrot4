@@ -1,0 +1,64 @@
+
+<mat-card cdkDrag [cdkDragData]="card" class="mat-card-card mat-elevation-z4 m-1">
+
+    <div class="row">
+        <div class="col-auto">
+            <mat-icon cdkDragHandle class="visible-on-hover">
+                drag_handle
+            </mat-icon>
+
+        </div>
+        <div class="col mat-h3 {{card.archived ? 'opacity-2' : ''}}">
+            <span (click)="onCardNameClick(list, card)">
+                {{ card.card_name }}
+            </span>
+
+        </div>
+        <div class="col-auto">
+            <button mat-button [matMenuTriggerFor]="menu" class="visible-on-hover">
+                <mat-icon>
+                    more_horiz
+                </mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+
+
+
+
+                <button mat-menu-item
+                    (click)="setCardArchivedState(list, card, !card.archived)">
+                    <mat-icon>{{ card.archived? 'unarchive' : 'archive' }}
+                    </mat-icon>
+                    <span>{{ card.archived? 'Restore' : 'Archive' }}</span>
+                </button>
+
+
+
+                <button mat-menu-item *ngIf="card.archived"
+                    (click)="onCardDeleteClick(list, card)"
+                    [disabled]="false && !card.archived">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
+                </button>
+                <button mat-menu-item (click)="onCardRenameClick(list, card)">
+                    <mat-icon>create</mat-icon>
+                    <span>Rename</span>
+
+                </button>
+
+
+
+            </mat-menu>
+
+
+        </div>
+    </div>
+
+
+    <!--
+    <mat-card-content>
+        {{ card.content ? card.content : '' }}
+    </mat-card-content>
+    -->
+
+</mat-card>

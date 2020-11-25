@@ -32,6 +32,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { ChangeValueComponent } from './components/dialogs/change-value/change-value.component';
 import { CardComponent } from './components/dialogs/card/card.component';
 import { ListComponent } from './components/list/list.component';
+import { CardForListComponent } from './components/card-for-list/card-for-list.component';
 
 function tokenGetter() {
   return localStorage.getItem('user');
@@ -54,6 +55,7 @@ function tokenGetter() {
     ChangeValueComponent,
     CardComponent,
     ListComponent,
+    CardForListComponent,
   ],
   imports: [
     MaterialModule,
