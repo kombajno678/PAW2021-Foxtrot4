@@ -1,9 +1,11 @@
-
-<mat-card cdkDrag [cdkDragData]="card" class="mat-card-card mat-elevation-z4 m-1">
+<mat-card cdkDrag
+          [cdkDragData]="card"
+          class="draggable-card mat-card-card mat-elevation-z4 m-1">
 
     <div class="row">
         <div class="col-auto">
-            <mat-icon cdkDragHandle class="visible-on-hover">
+            <mat-icon cdkDragHandle
+                      class="visible-on-hover">
                 drag_handle
             </mat-icon>
 
@@ -15,7 +17,9 @@
 
         </div>
         <div class="col-auto">
-            <button mat-button [matMenuTriggerFor]="menu" class="visible-on-hover">
+            <button mat-button
+                    [matMenuTriggerFor]="menu"
+                    class="visible-on-hover">
                 <mat-icon>
                     more_horiz
                 </mat-icon>
@@ -26,7 +30,7 @@
 
 
                 <button mat-menu-item
-                    (click)="setCardArchivedState(list, card, !card.archived)">
+                        (click)="setCardArchivedState(list, card, !card.archived)">
                     <mat-icon>{{ card.archived? 'unarchive' : 'archive' }}
                     </mat-icon>
                     <span>{{ card.archived? 'Restore' : 'Archive' }}</span>
@@ -34,13 +38,15 @@
 
 
 
-                <button mat-menu-item *ngIf="card.archived"
-                    (click)="onCardDeleteClick(list, card)"
-                    [disabled]="false && !card.archived">
+                <button mat-menu-item
+                        *ngIf="card.archived"
+                        (click)="onCardDeleteClick(list, card)"
+                        [disabled]="false && !card.archived">
                     <mat-icon>delete</mat-icon>
                     <span>Delete</span>
                 </button>
-                <button mat-menu-item (click)="onCardRenameClick(list, card)">
+                <button mat-menu-item
+                        (click)="onCardRenameClick(list, card)">
                     <mat-icon>create</mat-icon>
                     <span>Rename</span>
 

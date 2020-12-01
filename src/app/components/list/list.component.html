@@ -1,11 +1,14 @@
 <div class="col-auto p-1">
-    <mat-card cdkDrag [cdkDragData]="list" class="mat-card-list mat-elevation-z4">
+    <mat-card cdkDrag
+              [cdkDragData]="list"
+              class="mat-card-list mat-elevation-z4">
 
 
 
         <div class="row p-0 m-0 w-100">
             <div class="col-auto">
-                <mat-icon cdkDragHandle class="visible-on-hover">
+                <mat-icon cdkDragHandle
+                          class="visible-on-hover">
                     drag_handle
                 </mat-icon>
             </div>
@@ -13,7 +16,9 @@
                 {{ list.list_name }}
             </div>
             <div class="col-auto">
-                <button mat-icon-button [matMenuTriggerFor]="menu" class="visible-on-hover">
+                <button mat-icon-button
+                        [matMenuTriggerFor]="menu"
+                        class="visible-on-hover">
                     <mat-icon>
                         more_horiz
                     </mat-icon>
@@ -22,32 +27,40 @@
 
 
 
-                    <button mat-menu-item [matMenuTriggerFor]="otherBoards">
+                    <button mat-menu-item
+                            [matMenuTriggerFor]="otherBoards">
                         <mat-icon>content_cut</mat-icon>
                         <span>Move to another board</span>
                     </button>
                     <mat-menu #otherBoards="matMenu">
-                        <button *ngFor="let b of this.allBoards$ | async" mat-menu-item class="board-bg-{{b.color}}"
-                            [disabled]="b.id === list.board_id" (click)="moveListToAnotherBoard(list, this.board, b)">
+                        <button *ngFor="let b of this.allBoards$ | async"
+                                mat-menu-item
+                                class="board-bg-{{b.color}}"
+                                [disabled]="b.id === list.board_id"
+                                (click)="moveListToAnotherBoard(list, this.board, b)">
                             {{b.board_name}}
                         </button>
                     </mat-menu>
 
 
 
-                    <button mat-menu-item (click)="setListArchivedState(list, !list.archived)">
+                    <button mat-menu-item
+                            (click)="setListArchivedState(list, !list.archived)">
                         <mat-icon>{{ list.archived? 'unarchive' : 'archive' }}</mat-icon>
                         <span>{{ list.archived? 'Restore' : 'Archive' }}</span>
                     </button>
 
 
 
-                    <button mat-menu-item *ngIf="list.archived" (click)="onListDeleteClick(list)"
-                        [disabled]="list?.cards?.length >= 1 || (false && !list.archived)">
+                    <button mat-menu-item
+                            *ngIf="list.archived"
+                            (click)="onListDeleteClick(list)"
+                            [disabled]="list?.cards?.length >= 1 || (false && !list.archived)">
                         <mat-icon>delete</mat-icon>
                         <span>Delete</span>
                     </button>
-                    <button mat-menu-item (click)="onListRenameClick(list)">
+                    <button mat-menu-item
+                            (click)="onListRenameClick(list)">
                         <mat-icon>create</mat-icon>
                         <span>Rename</span>
 
@@ -60,13 +73,23 @@
 
         <mat-card-content>
 
-            <div class="row p-0 m-0 flex-row flex-nowrap" cdkDropList cdkDropListOrientation="vertical"
-                class="list-cards" [cdkDropListData]="list" [cdkDropListConnectedTo]
-                (cdkDropListDropped)="dropCard($event)">
+            <div class="row p-0 m-0 flex-row flex-nowrap"
+                 cdkDropList
+                 cdkDropListOrientation="vertical"
+                 class="list-cards draggable-list"
+                 [cdkDropListData]="list"
+                 [cdkDropListConnectedTo]
+                 (cdkDropListDropped)="dropCard($event)">
 
                 <ng-container *ngFor="let card of list.cards">
 
-                    <app-card-for-list [card]="card" [board]="board" [list]="list"></app-card-for-list>
+                    <div class="card-drag-custom-placeholder"
+                         *cdkDragPlaceholder></div>
+
+
+                    <app-card-for-list [card]="card"
+                                       [board]="board"
+                                       [list]="list"></app-card-for-list>
 
 
                 </ng-container>
@@ -78,7 +101,10 @@
 
         </mat-card-content>
         <mat-card-actions>
-            <button mat-button class="w-100" color="accent" (click)="onNewCardClick(list)">New
+            <button mat-button
+                    class="w-100"
+                    color="accent"
+                    (click)="onNewCardClick(list)">New
                 card</button>
         </mat-card-actions>
     </mat-card>

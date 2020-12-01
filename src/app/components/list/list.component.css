@@ -1,0 +1,9 @@
+.list-cards {
+  min-height: 2rem;
+}
+
+.mat-card-list {
+  width: 300px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}

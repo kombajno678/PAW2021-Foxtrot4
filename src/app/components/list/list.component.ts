@@ -15,7 +15,11 @@ import { CreateBoardDialogComponent } from 'src/app/components/boards/create-boa
 import { ChangeValueComponent } from 'src/app/components/dialogs/change-value/change-value.component';
 
 
-
+export interface moveListToAnotherBoardEvent {
+  list: BoardList;
+  sourceBoard: Board;
+  targetBoard: Board;
+}
 
 
 @Component({
@@ -32,6 +36,10 @@ export class ListComponent implements OnInit {
   @Input()
   allBoards$: Observable<Board[]>;
 
+  @Output()
+  onMoveListToAnotherBoard: EventEmitter<moveListToAnotherBoardEvent> = new EventEmitter<moveListToAnotherBoardEvent>();
+
+
 
   constructor(
     public dialog: MatDialog,
@@ -42,6 +50,17 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  moveListToAnotherBoard(list, source, target) {
+    let event: moveListToAnotherBoardEvent = {
+      list: list,
+      sourceBoard: source,
+      targetBoard: target
+    };
+
+    this.onMoveListToAnotherBoard.emit(event);
+
   }
 
 
