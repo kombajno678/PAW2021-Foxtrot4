@@ -1,0 +1,9 @@
+
+.boards-container{
+    padding:1rem;
+    max-width:1200px;
+    margin:auto;
+}
+.board-archived{
+    color:rgba(255, 255, 255, 0.5);
+}

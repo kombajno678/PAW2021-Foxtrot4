@@ -1,0 +1,48 @@
+<mat-card class="example-card">
+    <mat-card-header>
+        <mat-card-title>Provide login information</mat-card-title>
+        <mat-card-subtitle>please</mat-card-subtitle>
+    </mat-card-header>
+
+
+
+    <mat-card-content>
+        <form [formGroup]="form">
+
+            <div class="row w-100 p-3 m-0">
+
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Login</mat-label>
+                    <input matInput formControlName="login">
+                    <mat-error *ngIf="form.controls.login.hasError('required')">
+                        Login is <strong>required</strong>, duh
+                    </mat-error>
+                    <mat-error *ngIf="form.controls.login.hasError('pattern')">
+                        Login has <strong>invalid</strong> characters
+                    </mat-error>
+
+                </mat-form-field>
+            </div>
+
+            <div class="row w-100 p-3 m-0">
+
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Password</mat-label>
+                    <input type="password" matInput formControlName="password" [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="form.controls.password.hasError('required')">
+                    Password is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row w-100 p-3 m-0">
+                <button mat-flat-button color="primary" class="w-100 p-2" (click)="formSend()" [disabled]="loading">Log in</button>
+
+            </div>
+
+        </form>
+
+
+
+    </mat-card-content>
+</mat-card>

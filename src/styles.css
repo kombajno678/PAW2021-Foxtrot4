@@ -1,0 +1,130 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
+@import "../node_modules/material-design-icons/iconfont/material-icons.css";
+
+
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+/*@import "~@angular/material/prebuilt-themes/purple-green.css";*/
+/*@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";*/
+
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.opacity-0 {
+  opacity: 0%;
+}
+
+.opacity-1 {
+  opacity: 20%;
+}
+
+.opacity-2 {
+  opacity: 40%;
+}
+
+.opacity-3 {
+  opacity: 60%;
+}
+
+.opacity-4 {
+  opacity: 80%;
+}
+
+.opacity-5 {
+  opacity: 100%;
+}
+
+
+.visible-on-hover {
+  opacity: 20%;
+}
+
+.visible-on-hover:hover,
+.visible-on-hover:focus,
+.visible-on-hover:active {
+  opacity: 100%;
+}
+
+
+
+
+
+.board-bg-1 {
+  background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(90, 92, 106, 1) 0%, rgba(32, 45, 58, 1) 81.3%) !important;
+}
+
+.board-bg-2 {
+  background: linear-gradient(to right, rgb(242, 112, 156), rgb(255, 148, 114)) !important;
+}
+
+.board-bg-3 {
+  background-image: linear-gradient(to right, rgb(182, 244, 146), rgb(51, 139, 147)) !important;
+}
+
+.board-bg-4 {
+  background-image: linear-gradient(109.6deg, rgba(253, 199, 141, 1) 11.3%, rgba(249, 143, 253, 1) 100.2%) !important;
+}
+
+.board-bg-5 {
+  background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%) !important;
+}
+
+.board-bg-6 {
+  background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(253, 193, 104, 1) 0%, rgba(251, 128, 128, 1) 90%) !important;
+}
+
+.board-bg-7 {
+  background-image: linear-gradient(109.6deg, rgba(218, 185, 252, 1) 11.2%, rgba(125, 89, 252, 1) 91.1%) !important;
+}
+
+.board-bg-8 {
+  background: linear-gradient(to right, #ad5389, #3c1053) !important;
+}
+
+.board-bg-9 {
+  background-image: radial-gradient(circle farthest-corner at 12.3% 19.3%, rgba(85, 88, 218, 1) 0%, rgba(95, 209, 249, 1) 100.2%) !important;
+}
+
+
+
+
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.draggable-list.cdk-drop-list-dragging .draggable-card:not(.drag-custom-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.drag-custom-placeholder {
+  background: #ccc;
+  border: dotted 3px #999;
+  min-height: 60px;
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+
+}

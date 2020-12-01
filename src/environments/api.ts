@@ -1,0 +1,1 @@
+export const apiUrl = 'https://foxtrot4-backend.herokuapp.com';

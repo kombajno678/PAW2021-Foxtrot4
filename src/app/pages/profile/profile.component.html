@@ -1,0 +1,160 @@
+<ng-container *ngIf="user">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>
+                Profile
+            </mat-card-title>
+        </mat-card-header>
+
+
+
+        <mat-card-content>
+
+            <ng-container *ngIf="!editingState; else editing">
+
+                login : {{user.login}}<br />
+                first_name : {{user.first_name}}<br />
+                last_name : {{user.last_name}}<br />
+                email : {{user.email}}<br />
+
+            </ng-container>
+            <ng-template #editing>
+
+                <form [formGroup]="form">
+
+                    <div class="row w-100 p-3 m-0">
+
+
+                        <mat-form-field appearance="fill"
+                                        class="w-100">
+                            <mat-label>Email</mat-label>
+                            <input type="email"
+                                   matInput
+                                   formControlName="email">
+                            <mat-error
+                                       *ngIf="form.controls.email.hasError('email') && !form.controls.email.hasError('required')">
+                                Please enter a valid email address
+                            </mat-error>
+                            <mat-error *ngIf="form.controls.email.hasError('required')">
+                                Email is <strong>required</strong>
+                            </mat-error>
+
+                        </mat-form-field>
+                        <mat-form-field appearance="fill"
+                                        class="w-100">
+                            <mat-label>First name</mat-label>
+                            <input matInput
+                                   formControlName="first_name">
+                            <mat-error *ngIf="form.controls.first_name.hasError('required')">
+                                Field is <strong>required</strong>
+                            </mat-error>
+
+                        </mat-form-field>
+                        <mat-form-field appearance="fill"
+                                        class="w-100">
+                            <mat-label>Last name</mat-label>
+                            <input matInput
+                                   formControlName="last_name">
+                            <mat-error *ngIf="form.controls.last_name.hasError('required')">
+                                Field is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="row w-100 p-3 m-0">
+                        <div class="col">
+                            <mat-slide-toggle #changePassToggle
+                                              [checked]="changePass"
+                                              (toggleChange)="changePass = !changePass">
+                                Change password
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+
+                    <div class="row w-100 p-3 m-0">
+
+                        <ng-container *ngIf="changePass">
+
+
+                            <mat-form-field appearance="fill"
+                                            class="w-100">
+                                <mat-label>Password</mat-label>
+                                <input type="password"
+                                       matInput
+                                       formControlName="new_password">
+                                <mat-error *ngIf="form.controls.new_password.hasError('required')">
+                                    Field is <strong>required</strong>
+                                </mat-error>
+                                <mat-error *ngIf="form.controls.new_password.hasError('minlength')">
+                                    Password too short, required length >=
+                                    {{ form.controls.password.errors['minlength'].requiredLength }}
+                                </mat-error>
+                            </mat-form-field>
+                            <br>
+                            <mat-form-field appearance="fill"
+                                            class="w-100">
+                                <mat-label>Password again</mat-label>
+                                <input type="password"
+                                       matInput
+                                       formControlName="new_password_confirm">
+                                <mat-error *ngIf="form.controls.new_password_confirm.hasError('required')">
+                                    Field is <strong>required</strong>
+                                </mat-error>
+                                <mat-error *ngIf="form.controls.new_password_confirm.hasError('minlength')">
+                                    Password too short, required length >=
+                                    {{ form.controls.new_password_confirm.errors['minlength'].requiredLength }}
+                                </mat-error>
+
+
+
+                            </mat-form-field>
+                            <mat-error *ngIf="this.form.hasError('invalid')">
+                                Passwords <strong>do not</strong> match
+                            </mat-error>
+
+
+                        </ng-container>
+
+
+                    </div>
+
+
+
+                </form>
+
+            </ng-template>
+
+
+
+
+        </mat-card-content>
+
+
+        <mat-card-actions>
+
+            <ng-container *ngIf="!editingState; else editingActions">
+                <button mat-raised-button
+                        color="primary"
+                        (click)="startEditing()">
+                    Edit
+                </button>
+            </ng-container>
+            <ng-template #editingActions>
+                <button mat-raised-button
+                        color="primary"
+                        (click)="cancelEditing()">
+                    Cancel
+                </button>
+                <button mat-raised-button
+                        color="accent"
+                        (click)="savechanges()">
+                    Save
+                </button>
+            </ng-template>
+
+
+
+
+        </mat-card-actions>
+    </mat-card>
+</ng-container>

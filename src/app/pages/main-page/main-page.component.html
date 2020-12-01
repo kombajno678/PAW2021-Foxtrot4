@@ -1,0 +1,87 @@
+<ng-container *ngIf="this.user; else notLoggedIn">
+    <div class="center main loggedin  h-100 ">
+        <div class="text-center title-col">
+            <p>
+                <span class="mat-display-3">
+                    Hi {{user.first_name}}
+                </span>
+            </p>
+
+            <p class="mat-display-1">
+                Where to go now?
+            </p>
+
+            <br />
+
+
+            <a mat-raised-button
+               routerLink="allboards"
+               class="w-100"
+               color="primary">
+                <span class="mat-headline">
+                    Boards
+                </span>
+            </a>
+
+            <a mat-raised-button
+               routerLink="profile"
+               class="w-100"
+               color="primary">
+                <span class="mat-headline">
+                    Profile
+                </span>
+            </a>
+
+
+
+
+
+        </div>
+
+    </div>
+</ng-container>
+
+
+<ng-template #notLoggedIn>
+
+    <div class="center h-100 main">
+        <div class="text-center title-col">
+            <span class="mat-display-3">
+                Trellon't
+            </span>
+            <p class="mat-display-1">
+                Welcome
+            </p>
+
+            <br />
+
+
+
+
+            <a mat-raised-button
+               [routerLink]="'/signin'"
+               [queryParams]="{tab:1}"
+               class="w-100 signin"
+               color="primary">
+                <span class="mat-headline">
+                    Sign in
+                </span>
+            </a>
+
+
+            <br />
+
+
+            <a mat-raised-button
+               routerLink="login"
+               class="w-100 login"
+               color="primary">
+                <span class="mat-headline">Log in</span>
+            </a>
+
+        </div>
+
+    </div>
+
+
+</ng-template>

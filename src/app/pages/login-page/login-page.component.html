@@ -1,0 +1,26 @@
+<mat-tab-group [selectedIndex]="tab"
+               mat-align-tabs="start"
+               class=""
+               dynamicHeight>
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">person</mat-icon>
+            Log in
+        </ng-template>
+        <div class="tab-content">
+            <app-login-form (openSnackBarSubject)="handleChildEvent($event)"> ... </app-login-form>
+        </div>
+    </mat-tab>
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon class="example-tab-icon">person_add</mat-icon>
+            Sign in
+        </ng-template>
+        <div class="tab-content">
+            <app-signin-form (openSnackBarSubject)="handleChildEvent($event)"> ... </app-signin-form>
+        </div>
+    </mat-tab>
+
+
+</mat-tab-group>

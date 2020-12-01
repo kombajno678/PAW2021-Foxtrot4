@@ -1,0 +1,93 @@
+<div class="all board-bg-{{ board?.color }}">
+
+    <ng-container *ngIf="this.board; else loading">
+        <div class="row p-3 m-0 board-title-row">
+            <div class="col-12 col-md-auto">
+                <h1 class="m-0 align-middle">
+                    <button mat-icon-button
+                            (click)="onBackClick()">
+                        <mat-icon>
+                            arrow_back
+                        </mat-icon>
+                    </button>
+                    {{ board.board_name }}
+                </h1>
+            </div>
+
+            <div class="col-auto">
+                <ng-container *ngIf="!board.archived; else archiveButton">
+                    <button mat-button
+                            (click)="onArchiveClick()">Archive</button>
+
+                </ng-container>
+                <ng-template #archiveButton>
+                    <button mat-button
+                            (click)="onActivateClick()">Activate</button>
+
+                </ng-template>
+            </div>
+            <div class="col-auto">
+
+                <button mat-button
+                        [matMenuTriggerFor]="colorMenu">Color</button>
+                <mat-menu #colorMenu="matMenu">
+                    <button *ngFor="let color of colors"
+                            mat-menu-item
+                            class="board-bg-{{color}}"
+                            (click)="changeBoardColor(color)"></button>
+                </mat-menu>
+
+
+            </div>
+            <div class="col-auto">
+                <button mat-button
+                        (click)="onRenameClick()">
+                    Rename
+                </button>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="row p-0 m-0 flex-row flex-nowrap"
+             cdkDropList
+             [cdkDropListData]="board.lists"
+             cdkDropListOrientation="horizontal"
+             class="example-list"
+             (cdkDropListDropped)="dropList($event)"
+             cdkDropListGroup>
+            <!-- lists -->
+
+
+
+
+            <ng-container *ngFor="let list of this.getListsSorted()">
+                <app-list [list]="list"
+                          [board]="board"
+                          [allBoards$]="allBoards$"
+                          (onMoveListToAnotherBoard)="moveListToAnotherBoard($event)"></app-list>
+            </ng-container>
+
+
+
+
+            <div class="col-auto p-1">
+                <mat-card class="mat-card-list mat-elevation-z1">
+                    <button mat-button
+                            class="w-100"
+                            color="accent"
+                            (click)="onNewListClick()">New list</button>
+                </mat-card>
+            </div>
+
+        </div>
+    </ng-container>
+
+    <ng-template #loading>
+        <app-loading-spinner></app-loading-spinner>
+
+    </ng-template>
+
+</div>
