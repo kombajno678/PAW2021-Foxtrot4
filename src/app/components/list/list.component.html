@@ -83,11 +83,12 @@
 
                 <ng-container *ngFor="let card of list.cards">
 
+
                     <div class="card-drag-custom-placeholder"
                          *cdkDragPlaceholder></div>
 
 
-                    <app-card-for-list [card]="card"
+                    <app-card-for-list [ngClass]="'cardInList'" [card]="card"
                                        [board]="board"
                                        [list]="list"></app-card-for-list>
 

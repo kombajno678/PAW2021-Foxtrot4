@@ -1,0 +1,17 @@
+table{
+    width:100%;
+    margin-top:50px;
+    
+}
+.top{
+    margin-top: 20px;
+}
+.hovered{
+    cursor: pointer;
+}
+.hovered:hover {
+    border: white 4px solid;
+   
+}
+
+    
