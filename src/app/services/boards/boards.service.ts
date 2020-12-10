@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { BoardList } from 'src/app/models/BoardList';
 import { ListCard } from 'src/app/models/ListCard';
+import {Comment} from '../../models/Comment'
 @Injectable({
   providedIn: 'root'
 })
@@ -235,7 +236,7 @@ export class BoardsService {
   addCard(board: Board, list: BoardList, card_name: string): Observable<ListCard> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/add`;
 
-    let temp = new ListCard(null, card_name, '', list.cards ? list.cards.length + 1 : 1, false, list.id);
+    let temp = new ListCard(null, card_name, '', list.cards ? list.cards.length + 1 : 1, false, list.id, null, "");
     //temp.list_id = list.id;
 
     return this.http.post<ListCard>(url, temp)
@@ -245,7 +246,7 @@ export class BoardsService {
       );
 
   }
-
+  
   getCards(board: Board, list: BoardList): Observable<ListCard[]> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards`;
 
@@ -257,6 +258,39 @@ export class BoardsService {
 
 
   }
+  getComments(list: ListCard): Observable<Comment[]> {
+    let url = this.apiUrl + `/cards/${list.id}/comments/get`;
+    console.log(list.id)
+    return this.http.get<Comment[]>(url)
+      .pipe(
+        tap(_ => this.log('getComments result : ' + JSON.stringify(_))),
+        map((comments) => {
+          comments.forEach(element => {
+            element.posted_at = new Date(element.posted_at);
+          });
+          return comments;
+        }),
+        catchError(this.handleError<Comment[]>('getComments' + url, null))
+      );
+
+
+  }
+  
+
+  addComment(comment: Comment): Observable<Comment> {
+
+    let url = this.apiUrl + `/cards/${comment.card_id}/comments/add`;
+
+
+    return this.http.post<Comment>(url, comment)
+      .pipe(
+        tap(_ => this.log('addComent result : ' + JSON.stringify(_))),
+        catchError(this.handleError<Comment>('addComment ' + url, null))
+      );
+
+  }
+
+  
 
   getCard(board: Board, list: BoardList, cardId: number): Observable<ListCard> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/${cardId}`;
@@ -309,6 +343,19 @@ export class BoardsService {
       );
   }
 
+  
+  updateColor(card: ListCard, color: string): Observable<ListCard> {
+    let url = this.apiUrl + `/cards/label/`
+    let json = {
+      "label" : color,
+      "card_id" : card.id
+    }
+    return this.http.put<ListCard>(url, json)
+      .pipe(
+        tap(_ => this.log('updateCard result : ' + JSON.stringify(_))),
+        catchError(this.handleError<any>('updateCard ' + url, null))
+      );
+  }
 
   //APi not ready yet
   updateCard(board: Board, list: BoardList, card: ListCard): Observable<ListCard> {

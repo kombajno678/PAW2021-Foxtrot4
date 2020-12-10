@@ -1,3 +1,4 @@
+import { Comment } from './Comment';
 export class ListCard {
 
     id: number;
@@ -7,6 +8,8 @@ export class ListCard {
     archived: boolean;
     position: number;
     list_id?: number;
+    comments: Comment[];
+    labels: string;
 
     //created_at
 
@@ -24,13 +27,15 @@ export class ListCard {
 
     //cover
 
-    constructor(id: number, title: string, content: string, position: number, archived: boolean, list_id: number) {
+    constructor(id: number, title: string, content: string, position: number, archived: boolean, list_id: number, comments: Comment[], labels: string) {
         this.id = id;
         this.card_name = title;
         this.content = content;
         this.position = position;
         this.archived = archived;
         this.list_id = list_id;
+        this.comments = comments;
+        this.labels = labels;
     }
 
 }

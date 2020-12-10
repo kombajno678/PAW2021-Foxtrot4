@@ -33,6 +33,7 @@ import { ChangeValueComponent } from './components/dialogs/change-value/change-v
 import { CardComponent } from './components/dialogs/card/card.component';
 import { ListComponent } from './components/list/list.component';
 import { CardForListComponent } from './components/card-for-list/card-for-list.component';
+import { CommentSectionComponent } from './components/dialogs/comment-section/comment-section.component';
 
 function tokenGetter() {
   return localStorage.getItem('user');
@@ -56,6 +57,7 @@ function tokenGetter() {
     CardComponent,
     ListComponent,
     CardForListComponent,
+    CommentSectionComponent,
   ],
   imports: [
     MaterialModule,

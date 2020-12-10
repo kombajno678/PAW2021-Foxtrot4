@@ -1,58 +1,64 @@
-<h1 mat-dialog-title>
-    <mat-icon>
-        web_asset
-    </mat-icon>{{ card?.card_name }}
-</h1>
 
+<div [ngStyle]=" colorOfCard ? {'border-top': 'solid 20px '+colorOfCard} : {'border-top' : 'solid 20px rgba(0,0,0,0)'}"  class="row">
 
+  <div class="col">
+    <h1 class="top" mat-dialog-title>
+      <mat-icon> web_asset </mat-icon>{{ card?.card_name }}
+    </h1>
 
+    <mat-dialog-content>
+      <mat-icon> format_align_justify </mat-icon>
 
-<mat-dialog-content>
-
-
-
-    <mat-icon>
-        format_align_justify
-    </mat-icon>
-
-
-
-    <p>
+      <p>
         {{ card?.content }}
-    </p>
+      </p>
 
-
-
-
-
-
-
-
-    <form [formGroup]="form">
-
-
+      <span>Change description:</span>
+      <form [formGroup]="form">
         <div class="row">
-            <div class="col">
-
-                <mat-form-field appearance="fill"
-                                class="w-100">
-
-                    <input matInput
-                           formControlName="content">
-
-                </mat-form-field>
-
-
-            </div>
+          <div class="col">
+            <mat-form-field appearance="fill" class="w-100">
+              <input matInput formControlName="content" />
+            </mat-form-field>
+          </div>
         </div>
+      </form>
+      <button type="button" mat-button (click)="onSave()">Save</button>
 
-    </form>
+      <p>Comments:</p>
 
-    <button type="button"
-            mat-button
-            (click)="onSave()">
-        Save
-    </button>
+      <app-comment-section [allComments]="allComments"></app-comment-section>
 
+      <form [formGroup]="formComment">
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="fill" class="w-100">
+              <input matInput formControlName="content" />
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <button type="button" mat-button (click)="saveComment()">
+        Add Comment
+      </button>
+    </mat-dialog-content>
+  </div>
+  <div class="col-3">
+    <table mat-table [dataSource]="this.allColors" class="mat-elevation-z8">
 
-</mat-dialog-content>
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+      
+        <!-- Posted At Column -->
+        <ng-container matColumnDef="bgcolor">
+          <th mat-header-cell *matHeaderCellDef> Choose Label  </th>
+          <td [ngClass]="'hovered'" (click)="saveColor(element.bgcolor)" [ngStyle]=" element.choosed ? {'background-color': element.bgcolor, 'border': '#9c9c9c 5px solid'} :{'background-color': element.bgcolor}"  mat-cell *matCellDef="let element"> </td>
+        </ng-container>
+      
+ 
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row  *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+  </div>
+</div>

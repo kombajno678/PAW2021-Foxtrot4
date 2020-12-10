@@ -1,7 +1,7 @@
 
-<mat-card cdkDrag [cdkDragData]="card" class="mat-card-card mat-elevation-z4 m-1">
+<mat-card [ngStyle]="{'border-top': 'solid 6px '+this.color}" cdkDrag [cdkDragData]="card" class="mat-card-card mat-elevation-z4 m-1">
 
-    <div class="row">
+    <div class="row" (click)="onCardNameClick(list, card)">
         <div class="col-auto">
             <mat-icon cdkDragHandle class="visible-on-hover">
                 drag_handle
@@ -9,7 +9,7 @@
 
         </div>
         <div class="col mat-h3 {{card.archived ? 'opacity-2' : ''}}">
-            <span (click)="onCardNameClick(list, card)">
+            <span >
                 {{ card.card_name }}
             </span>
 
