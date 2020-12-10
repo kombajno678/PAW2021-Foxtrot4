@@ -10,6 +10,7 @@ import { BoardList } from 'src/app/models/BoardList';
 import { BoardsService } from 'src/app/services/boards/boards.service';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
 import { Observable } from 'rxjs';
+import { moveListToAnotherBoardEvent } from 'src/app/components/list/list.component';
 
 @Component({
   selector: 'app-board',
@@ -89,18 +90,18 @@ export class BoardComponent implements OnInit {
     })
   }
 
-  moveListToAnotherBoard(list: BoardList, oldBoard: Board, newBoard: Board) {
+  moveListToAnotherBoard(event: moveListToAnotherBoardEvent) {
 
-    let oldBoardId = list.board_id;
-    list.board_id = newBoard.id;
-    this.boardsService.updateList(oldBoard, list).subscribe(r => {
+    let oldBoardId = event.list.board_id;
+    event.list.board_id = event.targetBoard.id;
+    this.boardsService.updateList(event.sourceBoard, event.list).subscribe(r => {
       console.log('moveListToAnotherBoard result = ', r);
       if (r) {
         console.log('success');
         this.update();
       } else {
         console.log('fail');
-        list.board_id = oldBoardId;
+        event.list.board_id = oldBoardId;
       }
     })
 
