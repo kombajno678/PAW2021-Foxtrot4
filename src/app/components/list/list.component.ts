@@ -151,14 +151,15 @@ export class ListComponent implements OnInit {
         let old_name = list.list_name;
         list.list_name = new_name;
 
-        this.boardsService.updateBoard(this.board).subscribe(r => {
-          if (r) {
+        this.boardsService.updateList(this.board, list).subscribe(r => {
+          if (r && r.list_name === new_name) {
             this.snackbar.openSnackBar('List renamed to: ' + new_name);
           } else {
             this.snackbar.openSnackBar('Error!');
             list.list_name = old_name;
           }
         })
+
       }
     })
 
