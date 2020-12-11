@@ -46,19 +46,10 @@ export class CardForListComponent implements OnInit {
     })
   }
   onCardNameClick(list: BoardList, card: ListCard) {
-
-    //open card dialog
-    //if (event.target !== event.currentTarget) return;
-
     let dialogRef = this.dialog.open(CardComponent, { width: '100%', data: { board: this.board, list: list, card: card } },);
     dialogRef.afterClosed().subscribe(result => {
       this.refreshCard();
-
     })
-
-
-
-
   }
 
   setCardArchivedState(list: BoardList, card: ListCard, archivedState: boolean) {
