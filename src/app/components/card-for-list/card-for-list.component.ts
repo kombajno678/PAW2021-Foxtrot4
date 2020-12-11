@@ -37,24 +37,23 @@ export class CardForListComponent implements OnInit {
     private snackbar: SnackbarService) { }
 
   ngOnInit(): void {
-    this.color= this.card.labels
+    this.color = this.card.labels
   }
-  refreshCard(){
-    this.boardsService.getCard(this.board, this.list, this.card.id).subscribe(r=>
-      {
-        
-        this.color= r.labels
-      })
+  refreshCard() {
+    this.boardsService.getCard(this.board, this.list, this.card.id).subscribe(r => {
+
+      this.color = r.labels
+    })
   }
-  onCardNameClick( list: BoardList, card: ListCard) {
+  onCardNameClick(list: BoardList, card: ListCard) {
 
     //open card dialog
-    if (event.target !== event.currentTarget) return;
+    //if (event.target !== event.currentTarget) return;
 
-    let dialogRef = this.dialog.open(CardComponent, { width: '100%',  data: { board: this.board, list: list, card: card } }, );
+    let dialogRef = this.dialog.open(CardComponent, { width: '100%', data: { board: this.board, list: list, card: card } },);
     dialogRef.afterClosed().subscribe(result => {
       this.refreshCard();
-     
+
     })
 
 
