@@ -9,6 +9,40 @@
           mat-dialog-title>
         <mat-icon> web_asset </mat-icon>{{ card?.card_name }}
       </h1>
+      due_date : {{ card.due_date }}
+      completed : {{ card.completed }}
+
+    </div>
+    <div class="col-auto p-3">
+
+      <form class="example-form"
+            [formGroup]="formDueDate"
+            (ngSubmit)="onFormDueDateSubmit()"
+            ngNativeValidate>
+
+
+        <mat-form-field appearance="fill">
+          <mat-label>Due date</mat-label>
+          <input matInput
+                 [matDatepicker]="due_date_picker"
+                 formControlName="due_date">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="due_date_picker"></mat-datepicker-toggle>
+          <mat-datepicker #due_date_picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-slide-toggle formControlName="completed">Completed</mat-slide-toggle>
+        <button mat-raised-button
+                type="submit">Save</button>
+
+
+      </form>
+
+
+
+
+
+
 
     </div>
     <div class="col-auto p-3">
