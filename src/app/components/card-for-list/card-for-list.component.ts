@@ -39,6 +39,10 @@ export class CardForListComponent implements OnInit {
   ngOnInit(): void {
     this.color = this.card.labels
   }
+
+  displayDueDate(): string {
+    return new Date(this.card.due_date).toISOString().substr(5, 5);
+  }
   refreshCard() {
     this.boardsService.getCard(this.board, this.list, this.card.id).subscribe(r => {
 

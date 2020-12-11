@@ -1,0 +1,7 @@
+.due-date-completed {
+  color: rgb(0, 208, 0);
+}
+
+.due-date-notcompleted {
+  color: rgb(255, 153, 0);
+}
