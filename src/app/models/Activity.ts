@@ -30,7 +30,7 @@ export class Activity {
     board?: Board;
     list?: BoardList;
     card?: ListCard;
-    subjectname?:string;
+    name?:string;
 
 /*
     getSubject(): ActivitySubject {

@@ -67,18 +67,6 @@ export class ActivityService {
           catchError(this.handleError<Activity>(this.apiUrl + this.resourcePath, null))
         ).subscribe(r => {
           console.log('activity result = ', newActivity, r);
-          /*
-                    if (!this.activities) {
-                      this.activities = [];
-                    }
-                    this.activities.push(r);
-                    */
-          this.getAll(newActivity.board_id, true).subscribe(r => {
-            this.activities$.next(r);
-
-          })
-
-
           result.next(r);
         });
     }

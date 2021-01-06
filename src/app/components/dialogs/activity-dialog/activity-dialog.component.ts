@@ -45,7 +45,7 @@ export class ActivityDialogComponent implements OnInit {
       if (r) {
         r.forEach(a => {
           //get subject
-          
+          /*
           switch (Activity.getSubject(a)) {
             case ActivitySubject.BOARD:
               this.boardsService.getBoard(a.board_id).subscribe(r => {
@@ -64,7 +64,7 @@ export class ActivityDialogComponent implements OnInit {
                 a.subjectname = r.card_name;
               });
               break;
-          };
+          };*/
 
           this.boardActivities$.next(r.sort((a, b) => {
             return b.created_at.localeCompare(a.created_at);
