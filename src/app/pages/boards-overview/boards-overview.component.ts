@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CreateBoardDialogComponent } from 'src/app/components/boards/create-board-dialog/create-board-dialog.component';
@@ -11,7 +11,7 @@ import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
   templateUrl: './boards-overview.component.html',
   styleUrls: ['./boards-overview.component.css']
 })
-export class BoardsOverviewComponent implements OnInit {
+export class BoardsOverviewComponent implements OnInit, AfterViewInit {
 
   boards: Board[] = null;
 
@@ -23,8 +23,12 @@ export class BoardsOverviewComponent implements OnInit {
     public dialog: MatDialog) { }
 
   ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit() {
     //this.update();
-    this.boardsService.getBoards().subscribe(boards => {
+    this.boardsService.getBoards(true).subscribe(boards => {
       this.boards = boards;
     })
   }

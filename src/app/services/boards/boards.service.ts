@@ -63,7 +63,10 @@ export class BoardsService {
   }
 
 
-  getBoards(): Observable<Board[]> {
+  getBoards(refresh:boolean = false): Observable<Board[]> {
+    if(refresh){
+      this.refreshBoards();
+    }
     return this.allBoards.asObservable();
   }
 

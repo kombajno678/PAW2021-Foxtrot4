@@ -18,14 +18,14 @@ export class AuthService {
   userStorageKey: string = 'user';
   refreshStorageKey: string = 'refresh';
 
-  private userSubject: BehaviorSubject<any>;
-  public user: Observable<any>;
+  public userSubject: BehaviorSubject<any>;
+  //public user: Observable<any>;
 
 
 
   constructor(private http: HttpClient) {
     this.userSubject = new BehaviorSubject<any>(localStorage.getItem(this.userStorageKey));
-    this.user = this.userSubject.asObservable();
+    //this.user = this.userSubject.asObservable();
   }
 
 
@@ -34,6 +34,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.userStorageKey);
+    localStorage.removeItem(this.refreshStorageKey);
     //TODO: remove token
     this.userSubject.next(null);
 

@@ -13,7 +13,7 @@ export class MainPageComponent implements OnInit {
   user: any;
 
   constructor(private authService: AuthService, private jwt: JwtHelperService) {
-    this.authService.user.subscribe(u => {
+    this.authService.userSubject.asObservable().subscribe(u => {
       this.user = this.jwt.decodeToken(u);
 
     })

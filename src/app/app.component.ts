@@ -12,14 +12,14 @@ export class AppComponent implements OnInit {
 
   constructor(private authService:AuthService) {
     
-    this.authService.user.subscribe(u => {
+    this.authService.userSubject.asObservable().subscribe(u => {
       this.user = u;
     })
     
   }
 
   ngOnInit(){
-    this.authService.user.subscribe(u => {
+    this.authService.userSubject.asObservable().subscribe(u => {
       this.user = u;
     })
   }
