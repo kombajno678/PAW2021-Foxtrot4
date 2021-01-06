@@ -1,0 +1,34 @@
+<h2>Activity log</h2>
+<mat-dialog-content class="mat-typography">
+    <ng-container *ngIf="(this.boardActivities$ | async) as activities">
+   
+        <mat-list dense>
+            <mat-list-item *ngFor="let a of activities">
+    
+    
+                <mat-icon mat-list-icon>
+                    {{getIconBySubject(a)}}
+                </mat-icon>
+    
+                
+                
+    
+                <div mat-line>
+                    {{getDate(a)}}
+    
+                </div>
+                <div mat-line>
+                    {{a.username}}
+                    {{getAction(a)}}
+                    {{getSubject(a)}}
+                    {{a.subjectname}}
+                    
+                </div>
+    
+    
+            </mat-list-item>
+        </mat-list>
+    
+    </ng-container>
+</mat-dialog-content>
+

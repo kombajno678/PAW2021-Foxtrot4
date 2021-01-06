@@ -34,6 +34,7 @@ import { CardComponent } from './components/dialogs/card/card.component';
 import { ListComponent } from './components/list/list.component';
 import { CardForListComponent } from './components/card-for-list/card-for-list.component';
 import { CommentSectionComponent } from './components/dialogs/comment-section/comment-section.component';
+import { ActivityDialogComponent } from './components/dialogs/activity-dialog/activity-dialog.component';
 
 function tokenGetter() {
   return localStorage.getItem('user');
@@ -58,6 +59,7 @@ function tokenGetter() {
     ListComponent,
     CardForListComponent,
     CommentSectionComponent,
+    ActivityDialogComponent,
   ],
   imports: [
     MaterialModule,

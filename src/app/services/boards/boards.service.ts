@@ -6,7 +6,12 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { BoardList } from 'src/app/models/BoardList';
 import { ListCard } from 'src/app/models/ListCard';
-import {Comment} from '../../models/Comment'
+import { Comment } from '../../models/Comment';
+import { ActivityService } from './../activity/activity.service';
+import { Activity } from 'src/app/models/Activity';
+import { ActivityAction } from 'src/app/models/ActivityDescription';
+import { UserService } from '../user/user.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,11 +21,27 @@ export class BoardsService {
   boardsPath: string;
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private activityService: ActivityService, private userService: UserService) {
     this.boardsPath = this.apiUrl + '/boards';
     this.allBoards = new BehaviorSubject<Board[]>(null);
     this.refreshBoards();
 
+  }
+
+  createActivity(action: ActivityAction, boardId: number, listId: number = null, cardId: number = null, commentId: number = null) {
+    let a: Activity = {
+      //id : null,
+      board_id: boardId,
+      //user_id : ,
+      card_id: cardId,
+      list_id: listId,
+      comment_id: commentId,
+      description: {
+        action: action
+      }
+    }
+
+    this.activityService.create(a);
   }
 
 
@@ -64,6 +85,7 @@ export class BoardsService {
         tap(_ => {
           this.log('addBoard result : ' + JSON.stringify(_));
           this.refreshBoards();
+          this.createActivity(ActivityAction.CREATED, _.id);
         }),
         catchError(this.handleError<Board>('addBoard ' + url, null))
       );
@@ -72,21 +94,22 @@ export class BoardsService {
 
   archiveBoard(board: Board): Observable<Board> {
     board.archived = true;
-    return this.updateBoard(board);
+    return this.updateBoard(board, ActivityAction.ARCHIVED);
   }
 
   restoreBoard(board: Board): Observable<Board> {
     board.archived = false;
-    return this.updateBoard(board);
+    return this.updateBoard(board, ActivityAction.RESTORED);
   }
 
-  updateBoard(board: Board): Observable<Board> {
+  updateBoard(board: Board, action: ActivityAction = ActivityAction.UPDATED): Observable<Board> {
 
 
     return this.http.put<Board>(this.boardsPath + '/' + board.id, board).pipe(
       tap(_ => {
         this.log('updateBoard result : ' + JSON.stringify(_));
         this.refreshBoards();
+        this.createActivity(action, board.id);
       })
     )
 
@@ -100,6 +123,7 @@ export class BoardsService {
       tap(_ => {
         this.log('deleteBoard result' + JSON.stringify(_));
         this.refreshBoards();
+        this.createActivity(ActivityAction.DELETED, board.id);
       }),
       catchError(this.handleError<Board>('deleteBoard ' + url, null))
 
@@ -149,6 +173,16 @@ export class BoardsService {
         catchError(this.handleError<BoardList>('getList ' + url, null))
       );
   }
+  getListByID(boardId: number, listId: number): Observable<BoardList> {
+    let url = this.apiUrl + `/boards/${boardId}/lists/${listId}`;
+
+    return this.http.get<BoardList>(url)
+      .pipe(
+        tap(_ => this.log('getList result : ' + JSON.stringify(_))),
+        catchError(this.handleError<BoardList>('getList ' + url, null))
+      );
+  }
+
   addList(board: Board, listName: string): Observable<BoardList> {
 
     let url = this.apiUrl + `/boards/${board.id}/lists/add`;
@@ -157,7 +191,10 @@ export class BoardsService {
 
     return this.http.post<BoardList>(url, temp)
       .pipe(
-        tap(_ => this.log('addList result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('addList result : ' + JSON.stringify(_)),
+            this.createActivity(ActivityAction.CREATED, board.id, _.id);
+        }),
         catchError(this.handleError<BoardList>('addList ' + url, null))
       );
 
@@ -167,7 +204,7 @@ export class BoardsService {
 
   archiveList(board: Board, list: BoardList): Observable<BoardList> {
     list.archived = true;
-    return this.updateList(board, list);
+    return this.updateList(board, list, ActivityAction.ARCHIVED);
 
   }
 
@@ -175,7 +212,7 @@ export class BoardsService {
   //to be deprecated
   restoreList(board: Board, list: BoardList): Observable<BoardList> {
     list.archived = false;
-    return this.updateList(board, list);
+    return this.updateList(board, list, ActivityAction.RESTORED);
 
 
   }
@@ -185,7 +222,10 @@ export class BoardsService {
 
     return this.http.delete<any>(url)
       .pipe(
-        tap(_ => this.log('deleteList result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('deleteList result : ' + JSON.stringify(_));
+          this.createActivity(ActivityAction.DELETED, board.id, list.id);
+        }),
         catchError(this.handleError<any>('deleteList ' + url, null))
       );
   }
@@ -194,13 +234,16 @@ export class BoardsService {
 
 
 
-  updateList(board: Board, list: BoardList): Observable<BoardList> {
+  updateList(board: Board, list: BoardList, activity: ActivityAction = ActivityAction.UPDATED): Observable<BoardList> {
 
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}`;
 
     console.log('service > updating list : ', list);
     return this.http.put<BoardList>(url, list).pipe(
-      tap(_ => this.log('updateList result : ' + JSON.stringify(_))),
+      tap(_ => {
+        this.log('updateList result : ' + JSON.stringify(_));
+        this.createActivity(activity, board.id, list.id);
+      }),
       catchError(this.handleError<any>('updateList ' + url, null))
     );
 
@@ -241,12 +284,15 @@ export class BoardsService {
 
     return this.http.post<ListCard>(url, temp)
       .pipe(
-        tap(_ => this.log('addCard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('addCard result : ' + JSON.stringify(_));
+          this.createActivity(ActivityAction.CREATED, board.id, null, _.id);
+        }),
         catchError(this.handleError<ListCard>('addCard ' + url, null))
       );
 
   }
-  
+
   getCards(board: Board, list: BoardList): Observable<ListCard[]> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards`;
 
@@ -275,25 +321,38 @@ export class BoardsService {
 
 
   }
-  
 
-  addComment(comment: Comment): Observable<Comment> {
+
+  addComment(comment: Comment, board: Board): Observable<Comment> {
 
     let url = this.apiUrl + `/cards/${comment.card_id}/comments/add`;
 
 
     return this.http.post<Comment>(url, comment)
       .pipe(
-        tap(_ => this.log('addComent result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('addComent result : ' + JSON.stringify(_));
+          this.createActivity(ActivityAction.CREATED, board.id, null, null, _.id);
+        }),
         catchError(this.handleError<Comment>('addComment ' + url, null))
       );
 
   }
 
-  
+
 
   getCard(board: Board, list: BoardList, cardId: number): Observable<ListCard> {
     let url = this.apiUrl + `/boards/${board.id}/lists/${list.id}/cards/${cardId}`;
+
+    return this.http.get<ListCard>(url)
+      .pipe(
+        tap(_ => this.log('gatCard result : ' + JSON.stringify(_))),
+        catchError(this.handleError<ListCard>('gatCard ' + url, null))
+      );
+
+  }
+  getCardById(cardId: number): Observable<ListCard> {
+    let url = this.apiUrl + `/cards/${cardId}`;
 
     return this.http.get<ListCard>(url)
       .pipe(
@@ -308,7 +367,10 @@ export class BoardsService {
 
     return this.http.delete<any>(url)
       .pipe(
-        tap(_ => this.log('deleteCard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('deleteCard result : ' + JSON.stringify(_));
+          this.createActivity(ActivityAction.DELETED, board.id, null, card.id, null);
+        }),
         catchError(this.handleError<any>('deleteCard ' + url, null))
       );
   }
@@ -319,7 +381,10 @@ export class BoardsService {
 
     return this.http.post<any>(url, card.id)
       .pipe(
-        tap(_ => this.log('archiveCard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('archiveCard result : ' + JSON.stringify(_));
+          this.createActivity(ActivityAction.ARCHIVED, board.id, null, card.id, null);
+        }),
         map(result => {
           card.archived = false;
           return card;
@@ -334,7 +399,10 @@ export class BoardsService {
 
     return this.http.post<any>(url, card.id)
       .pipe(
-        tap(_ => this.log('restoreCard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('restoreCard result : ' + JSON.stringify(_));
+          this.createActivity(ActivityAction.RESTORED, board.id, null, card.id, null);
+        }),
         map(result => {
           card.archived = false;
           return card;
@@ -343,16 +411,19 @@ export class BoardsService {
       );
   }
 
-  
-  updateColor(card: ListCard, color: string): Observable<ListCard> {
+
+  updateColor(card: ListCard, color: string, board:Board): Observable<ListCard> {
     let url = this.apiUrl + `/cards/label/`
     let json = {
-      "label" : color,
-      "card_id" : card.id
+      "label": color,
+      "card_id": card.id
     }
     return this.http.put<ListCard>(url, json)
       .pipe(
-        tap(_ => this.log('updateCard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('updateCard result : ' + JSON.stringify(_));
+          this.createActivity(ActivityAction.UPDATED, board.id, null, card.id, null);
+        }),
         catchError(this.handleError<any>('updateCard ' + url, null))
       );
   }
@@ -365,7 +436,10 @@ export class BoardsService {
 
     return this.http.put<ListCard>(url, card)
       .pipe(
-        tap(_ => this.log('updateCard result : ' + JSON.stringify(_))),
+        tap(_ => {
+          this.log('updateCard result : ' + JSON.stringify(_));
+          this.createActivity(ActivityAction.UPDATED, board.id, null, card.id, null);
+        }),
         catchError(this.handleError<any>('updateCard ' + url, null))
       );
 

@@ -113,7 +113,7 @@ export class CardComponent implements OnInit {
   }
   saveColor(color: string) {
     console.log(color)
-    this.service.updateColor(this.card, color).
+    this.service.updateColor(this.card, color, this.board).
       subscribe(r => {
         if (r) {
           this.card = r
@@ -136,7 +136,7 @@ export class CardComponent implements OnInit {
   }
   saveComment() {
     if (this.formComment.valid) {
-      this.service.addComment(new Comment(null, this.formComment.controls.content.value, null, this.card.id))
+      this.service.addComment(new Comment(null, this.formComment.controls.content.value, null, this.card.id), this.board)
         .subscribe(r => {
           console.log(r)
           if (r) {

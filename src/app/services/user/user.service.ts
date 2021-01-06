@@ -29,6 +29,13 @@ export class UserService {
     return this.usersubject.asObservable();
   }
 
+  getById(id:number): Observable<User> {
+    return this.http.get<User>(this.path + '/' + id).pipe(
+      tap(r => this.usersubject.next(r)),
+      catchError(this.handleError<User>(this.path, null))
+    );
+  }
+
   update(user: User): Observable<User> {
     return this.http.put<User>(this.path, user).pipe(
       tap(r => this.usersubject.next(r)),

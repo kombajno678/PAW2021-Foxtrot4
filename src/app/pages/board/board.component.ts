@@ -9,8 +9,12 @@ import { Board } from 'src/app/models/Board';
 import { BoardList } from 'src/app/models/BoardList';
 import { BoardsService } from 'src/app/services/boards/boards.service';
 import { SnackbarService } from 'src/app/services/snackbar/snackbar.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { moveListToAnotherBoardEvent } from 'src/app/components/list/list.component';
+import { Activity } from 'src/app/models/Activity';
+import { ActivityService } from 'src/app/services/activity/activity.service';
+import { ActivityDescription } from 'src/app/models/ActivityDescription';
+import { ActivityDialogComponent } from 'src/app/components/dialogs/activity-dialog/activity-dialog.component';
 
 @Component({
   selector: 'app-board',
@@ -24,14 +28,22 @@ export class BoardComponent implements OnInit {
 
   colors = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+
+
   constructor(
     public dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute,
     private boardsService: BoardsService,
-    private snackbar: SnackbarService) {
+    private snackbar: SnackbarService,
+    ) {
+
+
 
   }
+
+  
+
 
   changeBoardColor(color: number = 0) {
     this.board.color = color
@@ -87,7 +99,9 @@ export class BoardComponent implements OnInit {
         console.error('this.board = null');
         this.snackbar.openSnackBar('Could not load this board :(');
       }
-    })
+    });
+
+    
   }
 
   moveListToAnotherBoard(event: moveListToAnotherBoardEvent) {
@@ -223,6 +237,15 @@ export class BoardComponent implements OnInit {
     });
   }
 
+
+
+
+  openActivityLog(){
+    const dialogRef = this.dialog.open(ActivityDialogComponent, {
+      width: '500px',
+      data: { board_id : this.id }
+    });
+  }
 
 
 

@@ -1,0 +1,25 @@
+mat-dialog-content {
+  max-height: 80vh !important;
+}
+
+
+
+
+mat-dialog-content {
+  scrollbar-width: thin;
+  scrollbar-color: #1b1b1b #616161;
+}
+
+mat-dialog-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+mat-dialog-content::-webkit-scrollbar-track {
+  background: #616161;
+}
+
+mat-dialog-content::-webkit-scrollbar-thumb {
+  background-color: #1b1b1b;
+
+  border: 0px solid #616161;
+}
